@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>W.AI Network</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@200;300;400;500&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #000;
+      overflow: hidden;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    #globe { width: 100vw; height: 100vh; }
+
+    .overlay {
+      position: absolute;
+      color: #00ff88;
+      z-index: 100;
+    }
+
+    /* Logo */
+    .logo {
+      top: 40px;
+      left: 48px;
+      font-size: 20px;
+      font-weight: 400;
+      letter-spacing: 12px;
+      opacity: 0.9;
+      text-shadow: 0 0 30px #00ff8855;
+    }
+    .logo::before {
+      content: '◉';
+      margin-right: 16px;
+      opacity: 0.6;
+      font-size: 10px;
+      animation: pulse 3s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 0.4; }
+      50% { opacity: 1; text-shadow: 0 0 10px #00ff88; }
+    }
+
+    /* Stats */
+    .stats {
+      bottom: 48px;
+      left: 48px;
+      display: flex;
+      gap: 64px;
+    }
+    .stat {
+      position: relative;
+    }
+    .stat::before {
+      content: '';
+      position: absolute;
+      top: -16px;
+      left: 0;
+      width: 24px;
+      height: 1px;
+      background: linear-gradient(90deg, #00ff88 0%, transparent 100%);
+      opacity: 0.4;
+    }
+    .stat-value {
+      font-size: 32px;
+      font-weight: 200;
+      letter-spacing: 3px;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .stat-value.updated {
+      color: #fff;
+      text-shadow: 0 0 30px #00ff88, 0 0 60px #00ff88;
+    }
+    .stat-label {
+      font-size: 8px;
+      letter-spacing: 5px;
+      opacity: 0.3;
+      margin-top: 8px;
+      font-weight: 300;
+    }
+
+    /* Live indicator */
+    .live-indicator {
+      bottom: 48px;
+      right: 48px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 8px;
+      letter-spacing: 5px;
+      opacity: 0.4;
+      font-weight: 300;
+    }
+    .dot {
+      width: 6px;
+      height: 6px;
+      background: #00ff88;
+      border-radius: 50%;
+      animation: breathe 2.5s ease-in-out infinite;
+      box-shadow: 0 0 8px #00ff88;
+    }
+    @keyframes breathe {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.3; transform: scale(0.8); }
+    }
+
+    /* Timestamp */
+    .timestamp {
+      top: 48px;
+      right: 48px;
+      font-size: 9px;
+      letter-spacing: 2px;
+      opacity: 0.25;
+      font-weight: 300;
+    }
+
+    /* Update flash */
+    .update-flash {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: radial-gradient(ellipse at center, rgba(0, 255, 136, 0.03) 0%, transparent 60%);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.2s ease-out;
+    }
+    .update-flash.active {
+      opacity: 1;
+    }
+
+    /* Scanlines - subtler */
+    .scanlines {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      background: repeating-linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 0.03) 0px,
+        rgba(0, 0, 0, 0.03) 1px,
+        transparent 1px,
+        transparent 2px
+      );
+      opacity: 0.5;
+      z-index: 1000;
+    }
+
+    /* Vignette - subtler */
+    .vignette {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      background: radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.5) 100%);
+      z-index: 999;
+    }
+
+    /* Corner accents */
+    .corner {
+      position: fixed;
+      width: 40px;
+      height: 40px;
+      border-color: #00ff8815;
+      border-style: solid;
+      border-width: 0;
+      z-index: 998;
+    }
+    .corner.tl { top: 24px; left: 24px; border-top-width: 1px; border-left-width: 1px; }
+    .corner.tr { top: 24px; right: 24px; border-top-width: 1px; border-right-width: 1px; }
+    .corner.bl { bottom: 24px; left: 24px; border-bottom-width: 1px; border-left-width: 1px; }
+    .corner.br { bottom: 24px; right: 24px; border-bottom-width: 1px; border-right-width: 1px; }
+  </style>
+</head>
+<body>
+  <div id="globe"></div>
+  <div class="scanlines"></div>
+  <div class="vignette"></div>
+  <div class="update-flash" id="flash"></div>
+  <div class="corner tl"></div>
+  <div class="corner tr"></div>
+  <div class="corner bl"></div>
+  <div class="corner br"></div>
+
+  <div class="overlay logo">W.AI</div>
+  <div class="overlay timestamp" id="timestamp"></div>
+
+  <div class="overlay stats">
+    <div class="stat">
+      <div class="stat-value" id="nodes">—</div>
+      <div class="stat-label">ACTIVE NODES</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value" id="cities">—</div>
+      <div class="stat-label">CITIES</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value" id="countries">—</div>
+      <div class="stat-label">COUNTRIES</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value" id="tps">—</div>
+      <div class="stat-label">TASKS/SEC</div>
+    </div>
+  </div>
+
+  <div class="overlay live-indicator">
+    <div class="dot"></div>
+    <span>LIVE</span>
+  </div>
+
+  <script src="https://unpkg.com/globe.gl@2.27.0/dist/globe.gl.min.js"></script>
+  <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
+  <script>
+    // Audio context for ambient sounds
+    let audioCtx = null;
+    let tickInterval = null;
+    let currentTPS = 0;
+
+    // Pentatonic scale for task ticks (higher, delicate)
+    const tickScale = [880, 987.77, 1108.73, 1318.51, 1479.98, 1760];
+    let tickIndex = 0;
+
+    function playTick() {
+      if (!audioCtx || audioCtx.state === 'suspended') return;
+      const now = audioCtx.currentTime;
+
+      // Random note from scale
+      tickIndex = (tickIndex + Math.floor(Math.random() * 3)) % tickScale.length;
+      const freq = tickScale[tickIndex];
+
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, now);
+      osc.frequency.exponentialRampToValueAtTime(freq * 0.98, now + 0.15);
+
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+
+      // Very soft, short tick
+      gain.gain.setValueAtTime(0, now);
+      gain.gain.linearRampToValueAtTime(0.012, now + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+
+      osc.start(now);
+      osc.stop(now + 0.3);
+    }
+
+    function updateTickRate(tps) {
+      currentTPS = tps;
+      if (tickInterval) clearInterval(tickInterval);
+      if (!tps || tps < 0.1) return;
+
+      // Cap at 4 ticks per second to avoid overwhelming
+      const ticksPerSec = Math.min(4, Math.max(0.5, tps / 10));
+      const interval = 1000 / ticksPerSec;
+
+      tickInterval = setInterval(() => {
+        if (Math.random() < 0.7) playTick(); // 70% chance each interval for organic feel
+      }, interval);
+    }
+
+    // Ambient pad note (lower, sustained)
+    function playAmbientNote() {
+      if (!audioCtx || audioCtx.state === 'suspended') return;
+      const now = audioCtx.currentTime;
+
+      const notes = [130.81, 164.81, 196, 220]; // C3, E3, G3, A3
+      const freq = notes[Math.floor(Math.random() * notes.length)];
+
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      const filter = audioCtx.createBiquadFilter();
+
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, now);
+
+      filter.type = 'lowpass';
+      filter.frequency.value = 600;
+
+      osc.connect(filter);
+      filter.connect(gain);
+      gain.connect(audioCtx.destination);
+
+      gain.gain.setValueAtTime(0, now);
+      gain.gain.linearRampToValueAtTime(0.02, now + 0.5);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 4);
+
+      osc.start(now);
+      osc.stop(now + 4);
+    }
+
+    let ambientInterval = null;
+    function startAmbientSounds() {
+      if (ambientInterval) return;
+      // Play ambient pad every 3-5 seconds
+      function scheduleNext() {
+        playAmbientNote();
+        const delay = 3000 + Math.random() * 2000;
+        ambientInterval = setTimeout(scheduleNext, delay);
+      }
+      scheduleNext();
+    }
+
+    function playChime() {
+      // Soft chord on data update
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const now = audioCtx.currentTime;
+
+      const chord = [261.63, 329.63, 392]; // C4, E4, G4
+
+      chord.forEach((freq, i) => {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, now);
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        const delay = i * 0.04;
+        gain.gain.setValueAtTime(0, now + delay);
+        gain.gain.linearRampToValueAtTime(0.02, now + delay + 0.05);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + delay + 1.2);
+
+        osc.start(now + delay);
+        osc.stop(now + delay + 1.2);
+      });
+    }
+
+    // Geo lookup tables
+    const geoLookup = {
+      "Seoul|KR": [37.5665, 126.9780], "Busan|KR": [35.1796, 129.0756], "Gwangju|KR": [35.1595, 126.8526], "Daegu|KR": [35.8714, 128.6014], "Daejeon|KR": [36.3504, 127.3845], "Singapore|SG": [1.3521, 103.8198], "Hong Kong|HK": [22.3193, 114.1694], "Hanoi|VN": [21.0285, 105.8542], "Ho Chi Minh City|VN": [10.8231, 106.6297], "Manila|PH": [14.5995, 120.9842], "Quezon City|PH": [14.6760, 121.0437], "Cebu City|PH": [10.3157, 123.8854], "Davao City|PH": [7.1907, 125.4553], "Los Angeles|US": [34.0522, -118.2437], "San Jose|US": [37.3382, -121.8863], "Houston|US": [29.7604, -95.3698], "Atlanta|US": [33.7490, -84.3880], "Charlotte|US": [35.2271, -80.8431], "Tokyo|JP": [35.6762, 139.6503], "Osaka|JP": [34.6937, 135.5023], "Beijing|CN": [39.9042, 116.4074], "Guangzhou|CN": [23.1291, 113.2644], "Nanjing|CN": [32.0603, 118.7969], "Istanbul|TR": [41.0082, 28.9784], "Pristina|XK": [42.6629, 21.1655], "Minsk|BY": [53.9045, 27.5615], "New Delhi|IN": [28.6139, 77.2090], "Mumbai|IN": [19.0760, 72.8777], "Bengaluru|IN": [12.9716, 77.5946], "Lagos|NG": [6.5244, 3.3792], "Dubai|AE": [25.2048, 55.2708], "Taipei|TW": [25.0330, 121.5654], "Bangkok|TH": [13.7563, 100.5018], "Jakarta|ID": [-6.2088, 106.8456], "Amsterdam|NL": [52.3676, 4.9041], "Frankfurt am Main|DE": [50.1109, 8.6821], "Oslo|NO": [59.9139, 10.7522], "Ljubljana|SI": [46.0569, 14.5058], "Vaughan|CA": [43.8361, -79.4983], "St Petersburg|RU": [59.9343, 30.3351],
+      "Yongsan-gu|KR": [37.5326, 126.9900], "Gangnam-gu|KR": [37.5172, 127.0473], "Songpa-gu|KR": [37.5145, 127.1050], "Mapo-gu|KR": [37.5638, 126.9084], "Gwanak-gu|KR": [37.4784, 126.9516], "Gwangjin-gu|KR": [37.5385, 127.0823], "Eunpyeong-gu|KR": [37.6176, 126.9227], "Gangdong-gu|KR": [37.5301, 127.1238], "Guro-gu|KR": [37.4954, 126.8875], "Seongbuk-gu|KR": [37.5894, 127.0167], "Busanjin-gu|KR": [35.1629, 129.0534], "Suyeong-gu|KR": [35.1457, 129.1133], "Buk-gu|KR": [35.1966, 128.9901], "Seo-gu|KR": [35.0975, 129.0242],
+      "Yongin-si|KR": [37.2411, 127.1776], "Suwon|KR": [37.2636, 127.0286], "Seongnam-si|KR": [37.4386, 127.1378], "Goyang-si|KR": [37.6584, 126.8320], "Bucheon-si|KR": [37.5034, 126.7660], "Hwaseong-si|KR": [37.1996, 126.8312], "Gimpo-si|KR": [37.6152, 126.7156], "Cheonan|KR": [36.8151, 127.1139], "Jeonju|KR": [35.8242, 127.1480], "Gyeongju|KR": [35.8562, 129.2247], "Chuncheon|KR": [37.8813, 127.7300],
+      "Da Nang|VN": [16.0544, 108.2022], "Biên Hòa|VN": [10.9574, 106.8426], "Nha Trang|VN": [12.2388, 109.1967], "Can Tho|VN": [10.0452, 105.7469],
+      "Makati City|PH": [14.5547, 121.0244], "Cagayan de Oro|PH": [8.4542, 124.6319], "Angeles City|PH": [15.1450, 120.5887], "Baguio City|PH": [16.4023, 120.5960],
+    };
+
+    const countryCoords = {
+      "KR": [37.5665, 126.9780], "PH": [14.5995, 120.9842], "VN": [21.0285, 105.8542], "US": [39.8283, -98.5795], "CA": [56.1304, -106.3468], "JP": [35.6762, 139.6503], "CN": [35.8617, 104.1954], "IN": [20.5937, 78.9629], "ID": [-0.7893, 113.9213], "MY": [4.2105, 101.9758], "TH": [15.8700, 100.9925], "SG": [1.3521, 103.8198], "HK": [22.3193, 114.1694], "TW": [25.0330, 121.5654], "TR": [38.9637, 35.2433], "XK": [42.6026, 20.9030], "BY": [53.9045, 27.5615], "UA": [48.3794, 31.1656], "RU": [61.5240, 105.3188], "DE": [51.1657, 10.4515], "FR": [46.2276, 2.2137], "NL": [52.1326, 5.2913], "BE": [50.8503, 4.3517], "IT": [41.8719, 12.5674], "GR": [39.0742, 21.8243], "HR": [45.1, 15.2], "SI": [46.1512, 14.9955], "PL": [51.9194, 19.1451], "RO": [45.9432, 24.9668], "NO": [60.4720, 8.4689], "AE": [23.4241, 53.8478], "NG": [9.0820, 8.6753], "SD": [12.8628, 30.2176], "GE": [42.3154, 43.3569], "NP": [28.3949, 84.1240], "MX": [23.6345, -102.5528],
+    };
+
+    function processData(cityData) {
+      const points = [];
+      cityData.forEach(d => {
+        const key = `${d.city}|${d.country}`;
+        let coords = geoLookup[key] || countryCoords[d.country];
+        if (coords) {
+          const jitter = () => (Math.random() - 0.5) * 0.15;
+          points.push({
+            lat: coords[0] + jitter(),
+            lng: coords[1] + jitter(),
+            city: d.city,
+            country: d.country,
+            workers: d.workers,
+            size: Math.sqrt(d.workers) * 0.18 + 0.1
+          });
+        }
+      });
+      return points;
+    }
+
+    // Persistent arc pool with lifecycle management
+    let arcPool = [];
+    let arcIdCounter = 0;
+
+    function createArc(points) {
+      const topNodes = points.filter(p => p.workers >= 3);
+      if (topNodes.length < 2) return null;
+      const a = topNodes[Math.floor(Math.random() * topNodes.length)];
+      const b = topNodes[Math.floor(Math.random() * topNodes.length)];
+      if (a && b && a !== b) {
+        return {
+          id: arcIdCounter++,
+          startLat: a.lat,
+          startLng: a.lng,
+          endLat: b.lat,
+          endLng: b.lng,
+          birth: Date.now(),
+          lifespan: 8000 + Math.random() * 12000 // 8-20 seconds
+        };
+      }
+      return null;
+    }
+
+    function updateArcs(points) {
+      const now = Date.now();
+
+      // Remove expired arcs
+      arcPool = arcPool.filter(arc => (now - arc.birth) < arc.lifespan);
+
+      // Add new arcs to maintain ~20 active
+      while (arcPool.length < 20 && points.length > 0) {
+        const newArc = createArc(points);
+        if (newArc) arcPool.push(newArc);
+      }
+
+      return arcPool;
+    }
+
+    // Initialize globe
+    const globe = Globe()
+      .backgroundColor('#000000')
+      .showGlobe(true)
+      .showAtmosphere(true)
+      .atmosphereColor('#00ff88')
+      .atmosphereAltitude(0.15)
+      .globeMaterial(new THREE.MeshBasicMaterial({ color: '#020804', transparent: true, opacity: 0.95 }))
+      .pointColor(() => '#00ff88')
+      .pointAltitude(d => d.size * 0.012)
+      .pointRadius(d => d.size)
+      .pointResolution(24)
+      .pointLabel(d => `<div style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #00ff88; background: rgba(0,0,0,0.85); padding: 10px 14px; border: 1px solid rgba(0,255,136,0.15); border-radius: 3px; backdrop-filter: blur(4px);">
+        <div style="font-weight: 400; letter-spacing: 1px;">${d.city}</div>
+        <div style="opacity: 0.5; font-size: 9px; margin-top: 4px; letter-spacing: 2px;">${d.workers} NODES</div>
+      </div>`)
+      .arcColor(d => {
+        const age = (Date.now() - d.birth) / d.lifespan;
+        const opacity = age < 0.1 ? age * 10 : age > 0.8 ? (1 - age) * 5 : 1;
+        return [`rgba(0,255,136,${0.6 * opacity})`, `rgba(0,255,136,${0.15 * opacity})`];
+      })
+      .arcAltitude(0.12)
+      .arcStroke(0.25)
+      .arcDashLength(0.5)
+      .arcDashGap(0.25)
+      .arcDashAnimateTime(4000)
+      .ringColor(() => t => `rgba(0,255,136,${1 - t})`)
+      .ringMaxRadius(d => d.size * 2.5)
+      .ringPropagationSpeed(1.2)
+      .ringRepeatPeriod(2500)
+      (document.getElementById('globe'));
+
+    // Hex grid for country outlines
+    fetch('https://raw.githubusercontent.com/vasturiano/globe.gl/master/example/datasets/ne_110m_admin_0_countries.geojson')
+      .then(res => res.json())
+      .then(countries => {
+        globe
+          .hexPolygonsData(countries.features)
+          .hexPolygonResolution(3)
+          .hexPolygonMargin(0.6)
+          .hexPolygonColor(() => 'rgba(0,255,136,0.08)')
+          .hexPolygonAltitude(0.002);
+      });
+
+    // Camera
+    globe.pointOfView({ lat: 20, lng: 105, altitude: 2.2 });
+    globe.controls().autoRotate = true;
+    globe.controls().autoRotateSpeed = 0.2;
+    globe.controls().enableZoom = true;
+    globe.controls().minDistance = 150;
+    globe.controls().maxDistance = 500;
+
+    // Update timestamp
+    function updateTimestamp() {
+      const now = new Date();
+      document.getElementById('timestamp').textContent =
+        now.toISOString().replace('T', ' ').slice(0, 19) + ' UTC';
+    }
+    updateTimestamp();
+    setInterval(updateTimestamp, 1000);
+
+    // Update stats with animation
+    let lastTotal = 0;
+    function updateStats(total, cities, countries, tps) {
+      const flash = document.getElementById('flash');
+
+      if (total !== lastTotal && lastTotal !== 0) {
+        playChime();
+        flash.classList.add('active');
+        setTimeout(() => flash.classList.remove('active'), 400);
+
+        ['nodes', 'cities', 'countries', 'tps'].forEach(id => {
+          document.getElementById(id).classList.add('updated');
+          setTimeout(() => document.getElementById(id).classList.remove('updated'), 600);
+        });
+      }
+      lastTotal = total;
+
+      document.getElementById('nodes').textContent = total.toLocaleString();
+      document.getElementById('cities').textContent = cities.toLocaleString();
+      document.getElementById('countries').textContent = countries.toLocaleString();
+      document.getElementById('tps').textContent = tps !== undefined ? tps.toFixed(1) : '—';
+    }
+
+    // Fetch and update data
+    async function fetchData() {
+      try {
+        const res = await fetch('/api/data');
+        const data = await res.json();
+
+        const points = processData(data.cities);
+
+        globe.pointsData(points);
+        globe.ringsData(points.filter(p => p.workers >= 5));
+
+        updateStats(data.total_active, data.total_cities, data.total_countries, data.tasks_per_second);
+
+        // Update tick rate based on tasks per second
+        if (data.tasks_per_second !== undefined) {
+          updateTickRate(data.tasks_per_second);
+        }
+      } catch (e) {
+        console.log('Waiting for data...', e.message);
+      }
+    }
+
+    // Initial fetch + periodic updates
+    fetchData();
+    setInterval(fetchData, 15000);
+
+    // Smooth arc lifecycle - update every 500ms for smooth fade in/out
+    setInterval(() => {
+      const points = globe.pointsData();
+      if (points.length) {
+        const arcs = updateArcs(points);
+        globe.arcsData(arcs);
+      }
+    }, 500);
+
+    // Audio init - iOS requires synchronous creation in touch handler
+    let audioStarted = false;
+    let audioUnlocked = false;
+
+    function unlockAudio(e) {
+      if (audioUnlocked) return;
+      audioUnlocked = true;
+
+      // Create AudioContext synchronously in gesture
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+      // iOS requires playing something immediately in the gesture
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      gain.gain.value = 0.15;
+      osc.frequency.value = 440;
+      osc.start(0);
+      osc.stop(audioCtx.currentTime + 0.15);
+
+      // Visual feedback
+      document.body.style.background = '#001100';
+      setTimeout(() => document.body.style.background = '#000', 100);
+
+      // Start ambient after unlock
+      setTimeout(() => {
+        audioStarted = true;
+        startAmbientSounds();
+        if (currentTPS > 0) updateTickRate(currentTPS);
+      }, 200);
+
+      console.log('Audio unlocked:', audioCtx.state);
+    }
+
+    // Attach directly to document for iOS
+    document.addEventListener('touchstart', unlockAudio, { once: true });
+    document.addEventListener('click', unlockAudio, { once: true });
+
+    // Desktop auto-start
+    if (!('ontouchstart' in window)) {
+      setTimeout(() => {
+        unlockAudio();
+      }, 1000);
+    }
+  </script>
+</body>
+</html>
