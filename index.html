@@ -335,35 +335,11 @@
 
       /* Tablet breakpoint */
       @media screen and (max-width: 768px) {
-        .intel {
-          padding: 0 10px !important;
-        }
-        .intel .menu {
-          padding: 12px 14px !important;
-        }
         .caption-width {
           font-size: 10px !important;
-          line-height: 1.4 !important;
         }
         #globe-stats {
-          bottom: 22% !important;
-          gap: 16px !important;
-        }
-        .social {
-          gap: 8px !important;
-          z-index: 100 !important;
-          position: relative !important;
-        }
-        .social .menu {
-          padding: 10px !important;
-        }
-        .updates {
-          z-index: 100 !important;
-          position: relative !important;
-        }
-        #globe {
-          transform: scale(0.9);
-          transform-origin: center center;
+          bottom: 20% !important;
         }
       }
 
@@ -372,87 +348,23 @@
         .heading-new.main {
           font-size: calc(14vw - 23px);
         }
-        /* Hide timestamp on mobile - it crowds the header */
         #timestamp {
           display: none !important;
         }
-        /* Scale down globe on mobile */
-        #globe {
-          transform: scale(0.75) !important;
-          transform-origin: center 40% !important;
-        }
-        .intel {
-          padding: 0 8px !important;
-          gap: 8px !important;
-          z-index: 100 !important;
-        }
-        .intel .menu {
-          padding: 10px 12px !important;
-        }
         .caption-width {
           font-size: 9px !important;
-          line-height: 1.3 !important;
           letter-spacing: 1px !important;
         }
-        .intel .icon {
-          width: 20px !important;
-          height: 20px !important;
-          min-width: 20px !important;
-        }
-        .intel .icon svg {
-          width: 18px !important;
-          height: 18px !important;
-        }
         #globe-stats {
-          bottom: 38% !important;
-          gap: 20px !important;
-          flex-wrap: wrap !important;
-          justify-content: center !important;
-          max-width: 85vw !important;
-        }
-        .globe-stat {
-          min-width: 70px !important;
-          text-align: center !important;
-        }
-        .social {
-          gap: 8px !important;
-          z-index: 100 !important;
-          position: relative !important;
-        }
-        .social .menu {
-          padding: 10px !important;
-        }
-        .updates {
-          z-index: 100 !important;
-          position: relative !important;
-        }
-        .updates .menu {
-          padding: 12px !important;
-        }
-        .updates-form {
-          flex-direction: column !important;
-          gap: 8px !important;
-        }
-        .field.caption {
-          width: 100% !important;
-          min-width: 0 !important;
+          bottom: 25% !important;
+          gap: 16px !important;
         }
       }
 
       /* Very small screens */
       @media screen and (max-width: 380px) {
-        .logo-text {
-          max-width: 200px !important;
-        }
         .heading-new.main {
           font-size: 18px !important;
-        }
-        #globe {
-          transform: scale(0.65) !important;
-          transform-origin: center 35% !important;
-        }
-        #globe-stats {
-          bottom: 42% !important;
         }
       }
     </style>
@@ -1118,21 +1030,11 @@
     <a href="/terms-of-services" style="color: rgba(255,255,255,0.5); text-decoration: none; transition: color 0.2s;">Terms</a>
   </footer>
   <style>
-    @media screen and (max-width: 768px) {
-      #site-footer {
-        position: relative !important;
-        bottom: auto !important;
-        transform: none !important;
-        left: auto !important;
-        margin: 20px auto !important;
-        padding-bottom: 20px !important;
-      }
-    }
     @media screen and (max-width: 479px) {
       #site-footer {
         gap: 10px !important;
         font-size: 10px !important;
-        padding-bottom: 15px !important;
+        bottom: 10px !important;
       }
     }
   </style>
