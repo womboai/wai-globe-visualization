@@ -132,6 +132,8 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             self.send_response(200)
             self.send_header("Content-Type", "application/json")
             self.send_header("Access-Control-Allow-Origin", "*")
+            # Edge caching: serve cached response for 10s, revalidate in background for up to 60s
+            self.send_header("Cache-Control", "s-maxage=10, stale-while-revalidate=60")
             self.end_headers()
 
             cities = get_live_data()
@@ -147,6 +149,12 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             }
             self.wfile.write(json.dumps(data).encode())
         else:
+            # Handle clean URLs (e.g., /privacy-policy -> /privacy-policy.html)
+            path = self.path.split('?')[0]  # Remove query string
+            if path != "/" and '.' not in path.split('/')[-1]:
+                html_path = Path(f".{path}.html")
+                if html_path.exists():
+                    self.path = f"{path}.html"
             super().do_GET()
 
 
