@@ -351,9 +351,19 @@
         }
         .social {
           gap: 8px !important;
+          z-index: 100 !important;
+          position: relative !important;
         }
         .social .menu {
           padding: 10px !important;
+        }
+        .updates {
+          z-index: 100 !important;
+          position: relative !important;
+        }
+        #globe {
+          transform: scale(0.9);
+          transform-origin: center center;
         }
       }
 
@@ -362,9 +372,19 @@
         .heading-new.main {
           font-size: calc(14vw - 23px);
         }
+        /* Hide timestamp on mobile - it crowds the header */
+        #timestamp {
+          display: none !important;
+        }
+        /* Scale down globe on mobile */
+        #globe {
+          transform: scale(0.75) !important;
+          transform-origin: center 40% !important;
+        }
         .intel {
           padding: 0 8px !important;
           gap: 8px !important;
+          z-index: 100 !important;
         }
         .intel .menu {
           padding: 10px 12px !important;
@@ -384,25 +404,30 @@
           height: 18px !important;
         }
         #globe-stats {
-          bottom: 28% !important;
-          gap: 12px !important;
+          bottom: 38% !important;
+          gap: 20px !important;
           flex-wrap: wrap !important;
           justify-content: center !important;
-          max-width: 90vw !important;
+          max-width: 85vw !important;
         }
         .globe-stat {
-          min-width: 60px !important;
+          min-width: 70px !important;
+          text-align: center !important;
         }
         .social {
-          gap: 6px !important;
-          flex-wrap: wrap !important;
-          justify-content: center !important;
+          gap: 8px !important;
+          z-index: 100 !important;
+          position: relative !important;
         }
         .social .menu {
-          padding: 8px !important;
+          padding: 10px !important;
         }
-        .updates.form-section {
-          padding: 0 10px !important;
+        .updates {
+          z-index: 100 !important;
+          position: relative !important;
+        }
+        .updates .menu {
+          padding: 12px !important;
         }
         .updates-form {
           flex-direction: column !important;
@@ -410,6 +435,7 @@
         }
         .field.caption {
           width: 100% !important;
+          min-width: 0 !important;
         }
       }
 
@@ -421,8 +447,12 @@
         .heading-new.main {
           font-size: 18px !important;
         }
+        #globe {
+          transform: scale(0.65) !important;
+          transform-origin: center 35% !important;
+        }
         #globe-stats {
-          bottom: 32% !important;
+          bottom: 42% !important;
         }
       }
     </style>
@@ -1088,11 +1118,21 @@
     <a href="/terms-of-services" style="color: rgba(255,255,255,0.5); text-decoration: none; transition: color 0.2s;">Terms</a>
   </footer>
   <style>
+    @media screen and (max-width: 768px) {
+      #site-footer {
+        position: relative !important;
+        bottom: auto !important;
+        transform: none !important;
+        left: auto !important;
+        margin: 20px auto !important;
+        padding-bottom: 20px !important;
+      }
+    }
     @media screen and (max-width: 479px) {
       #site-footer {
-        bottom: 10px !important;
-        gap: 12px !important;
+        gap: 10px !important;
         font-size: 10px !important;
+        padding-bottom: 15px !important;
       }
     }
   </style>
