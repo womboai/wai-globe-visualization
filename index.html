@@ -333,9 +333,96 @@
         100% {background-position:400px 0%}
       }
 
+      /* Tablet breakpoint */
+      @media screen and (max-width: 768px) {
+        .intel {
+          padding: 0 10px !important;
+        }
+        .intel .menu {
+          padding: 12px 14px !important;
+        }
+        .caption-width {
+          font-size: 10px !important;
+          line-height: 1.4 !important;
+        }
+        #globe-stats {
+          bottom: 22% !important;
+          gap: 16px !important;
+        }
+        .social {
+          gap: 8px !important;
+        }
+        .social .menu {
+          padding: 10px !important;
+        }
+      }
+
+      /* Mobile breakpoint */
       @media screen and (max-width: 479px) {
         .heading-new.main {
           font-size: calc(14vw - 23px);
+        }
+        .intel {
+          padding: 0 8px !important;
+          gap: 8px !important;
+        }
+        .intel .menu {
+          padding: 10px 12px !important;
+        }
+        .caption-width {
+          font-size: 9px !important;
+          line-height: 1.3 !important;
+          letter-spacing: 1px !important;
+        }
+        .intel .icon {
+          width: 20px !important;
+          height: 20px !important;
+          min-width: 20px !important;
+        }
+        .intel .icon svg {
+          width: 18px !important;
+          height: 18px !important;
+        }
+        #globe-stats {
+          bottom: 28% !important;
+          gap: 12px !important;
+          flex-wrap: wrap !important;
+          justify-content: center !important;
+          max-width: 90vw !important;
+        }
+        .globe-stat {
+          min-width: 60px !important;
+        }
+        .social {
+          gap: 6px !important;
+          flex-wrap: wrap !important;
+          justify-content: center !important;
+        }
+        .social .menu {
+          padding: 8px !important;
+        }
+        .updates.form-section {
+          padding: 0 10px !important;
+        }
+        .updates-form {
+          flex-direction: column !important;
+          gap: 8px !important;
+        }
+        .field.caption {
+          width: 100% !important;
+        }
+      }
+
+      /* Very small screens */
+      @media screen and (max-width: 380px) {
+        .logo-text {
+          max-width: 200px !important;
+        }
+        .heading-new.main {
+          font-size: 18px !important;
+        }
+        #globe-stats {
+          bottom: 32% !important;
         }
       }
     </style>
@@ -980,16 +1067,19 @@
   </script>
 
   <!-- Footer -->
-  <footer style="
+  <footer id="site-footer" style="
     position: fixed;
     bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
     z-index: 60;
     display: flex;
-    gap: 24px;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
     font-family: 'Inter', sans-serif;
     font-size: 12px;
+    max-width: 90vw;
   ">
     <a href="https://app.w.ai/download" style="color: rgba(255,255,255,0.5); text-decoration: none; transition: color 0.2s;">Download</a>
     <a href="https://docs.w.ai" style="color: rgba(255,255,255,0.5); text-decoration: none; transition: color 0.2s;">Docs</a>
@@ -997,6 +1087,15 @@
     <a href="/privacy-policy" style="color: rgba(255,255,255,0.5); text-decoration: none; transition: color 0.2s;">Privacy</a>
     <a href="/terms-of-services" style="color: rgba(255,255,255,0.5); text-decoration: none; transition: color 0.2s;">Terms</a>
   </footer>
+  <style>
+    @media screen and (max-width: 479px) {
+      #site-footer {
+        bottom: 10px !important;
+        gap: 12px !important;
+        font-size: 10px !important;
+      }
+    }
+  </style>
 
   <!-- Scripts -->
   <script src="assets/js/jquery.min.js" type="text/javascript"></script>
