@@ -15,7 +15,6 @@ import socketserver
 import urllib.request
 import base64
 import ssl
-from pathlib import Path
 
 PORT = 8080
 
@@ -132,6 +131,8 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             self.send_response(200)
             self.send_header("Content-Type", "application/json")
             self.send_header("Access-Control-Allow-Origin", "*")
+            # Edge caching: serve cached response for 10s, revalidate in background for up to 60s
+            self.send_header("Cache-Control", "s-maxage=10, stale-while-revalidate=60")
             self.end_headers()
 
             cities = get_live_data()
