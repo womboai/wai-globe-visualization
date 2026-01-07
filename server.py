@@ -15,6 +15,7 @@ import socketserver
 import urllib.request
 import base64
 import ssl
+from pathlib import Path
 
 PORT = 8080
 
@@ -148,6 +149,12 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             }
             self.wfile.write(json.dumps(data).encode())
         else:
+            # Handle clean URLs (e.g., /privacy-policy -> /privacy-policy.html)
+            path = self.path.split('?')[0]  # Remove query string
+            if path != "/" and '.' not in path.split('/')[-1]:
+                html_path = Path(f".{path}.html")
+                if html_path.exists():
+                    self.path = f"{path}.html"
             super().do_GET()
 
 
