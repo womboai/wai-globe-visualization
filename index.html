@@ -355,14 +355,9 @@
           font-size: 9px !important;
           letter-spacing: 1px !important;
         }
-        /* Shrink globe on mobile */
-        #globe {
-          transform: scale(0.65);
-          transform-origin: center 25%;
-        }
         /* 2x2 grid for stats on mobile */
         #globe-stats {
-          bottom: 30% !important;
+          bottom: 22% !important;
           display: grid !important;
           grid-template-columns: 1fr 1fr !important;
           gap: 16px 32px !important;
@@ -380,12 +375,8 @@
         .heading-new.main {
           font-size: 18px !important;
         }
-        #globe {
-          transform: scale(0.55);
-          transform-origin: center 20%;
-        }
         #globe-stats {
-          bottom: 32% !important;
+          bottom: 24% !important;
         }
       }
     </style>
@@ -940,8 +931,15 @@
           .hexPolygonAltitude(0.002);
       });
 
-    // Camera
-    globe.pointOfView({ lat: 20, lng: 105, altitude: 2.2 });
+    // Camera - adjust altitude based on screen size for better mobile view
+    function getGlobeAltitude() {
+      const width = window.innerWidth;
+      if (width <= 380) return 3.2;      // Very small screens - zoom out more
+      if (width <= 500) return 2.8;      // Mobile - zoom out for smaller globe
+      return 2.2;                         // Desktop default
+    }
+
+    globe.pointOfView({ lat: 20, lng: 105, altitude: getGlobeAltitude() });
     globe.controls().autoRotate = true;
     globe.controls().autoRotateSpeed = 0.3;
     globe.controls().enableZoom = false;
@@ -989,6 +987,9 @@
     window.addEventListener('resize', () => {
       globe.width(window.innerWidth);
       globe.height(window.innerHeight);
+      // Adjust globe altitude for mobile/desktop
+      const pov = globe.pointOfView();
+      globe.pointOfView({ lat: pov.lat, lng: pov.lng, altitude: getGlobeAltitude() });
     });
 
     // Handle visibility change to prevent stutter on refocus
