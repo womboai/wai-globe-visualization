@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+
+  <title>GPU Earnings Calculator - w.ai</title>
+  <meta name="title" content="GPU Earnings Calculator - w.ai">
+  <meta name="description" content="Calculate expected daily points earnings for your GPU on the W.AI Compute Network. Find your GPU model and see real earnings data.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://w.ai/gpu-stats">
+
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://w.ai/gpu-stats">
+  <meta property="og:title" content="GPU Earnings Calculator - w.ai">
+  <meta property="og:description" content="Calculate expected daily points earnings for your GPU on the W.AI Compute Network.">
+  <meta property="og:image" content="https://wai-globe-visualization-wombo.vercel.app/assets/images/og-image.png">
+  <meta property="og:site_name" content="w.ai">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://w.ai/gpu-stats">
+  <meta name="twitter:title" content="GPU Earnings Calculator - w.ai">
+  <meta name="twitter:image" content="https://wai-globe-visualization-wombo.vercel.app/assets/images/og-image.png">
+
+  <meta name="theme-color" content="#000000">
+
+  <link href="assets/css/style.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:regular,500,600,700,800" media="all">
+  <link href="assets/images/favicon.jpg" rel="shortcut icon" type="image/jpeg">
+
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      background-color: #000;
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      line-height: 1.6;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 40px 20px 80px;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-top: 20px;
+    }
+    .header a {
+      display: inline-block;
+      margin-bottom: 30px;
+    }
+    .header img {
+      height: 40px;
+    }
+    h1 {
+      font-size: clamp(28px, 5vw, 42px);
+      font-weight: 700;
+      margin: 0 0 8px;
+      color: #fff;
+    }
+    .subtitle {
+      color: rgba(255,255,255,0.6);
+      margin: 0 0 32px;
+      font-size: 14px;
+    }
+    .search-input {
+      width: 100%;
+      padding: 14px 20px;
+      font-size: 16px;
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 12px;
+      background: rgba(255,255,255,0.05);
+      color: #fff;
+      margin-bottom: 24px;
+      font-family: 'Inter', sans-serif;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .search-input:focus {
+      outline: none;
+      border-color: rgba(72, 219, 251, 0.5);
+      background: rgba(255,255,255,0.08);
+    }
+    .search-input::placeholder {
+      color: rgba(255,255,255,0.4);
+    }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    @media (max-width: 600px) {
+      .stats { grid-template-columns: 1fr; }
+    }
+    .stat {
+      background: rgba(255,255,255,0.05);
+      padding: 20px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .stat-value {
+      font-size: 28px;
+      font-weight: 700;
+      color: #48dbfb;
+    }
+    .stat-label {
+      font-size: 12px;
+      color: rgba(255,255,255,0.5);
+      margin-top: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .table-wrapper {
+      overflow-x: auto;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      min-width: 600px;
+    }
+    th {
+      text-align: left;
+      padding: 14px 12px;
+      background: rgba(255,255,255,0.05);
+      color: rgba(255,255,255,0.6);
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: color 0.2s;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    th:hover { color: #48dbfb; }
+    th.sorted { color: #48dbfb; }
+    td {
+      padding: 12px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+    tr:hover td { background: rgba(255,255,255,0.03); }
+    .gpu-name {
+      color: #48dbfb;
+      font-weight: 500;
+    }
+    .number {
+      font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+      text-align: right;
+    }
+    .highlight {
+      background: rgba(72, 219, 251, 0.2);
+      border-radius: 2px;
+    }
+    .pts-day {
+      color: #3fb950;
+      font-weight: 600;
+    }
+    .pts-hour { color: rgba(255,255,255,0.7); }
+    .vram { color: #a78bfa; }
+    .workers { color: rgba(255,255,255,0.5); font-size: 12px; }
+    .range { color: rgba(255,255,255,0.4); font-size: 12px; }
+    .no-results {
+      text-align: center;
+      padding: 60px 20px;
+      color: rgba(255,255,255,0.4);
+    }
+    .selected td {
+      background: rgba(72, 219, 251, 0.1);
+    }
+    .footer-links {
+      margin-top: 60px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+    }
+    .footer-links a {
+      color: rgba(255,255,255,0.5);
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover {
+      color: #fff;
+    }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: rgba(255,255,255,0.6);
+      text-decoration: none;
+      font-size: 14px;
+      margin-bottom: 24px;
+      transition: color 0.2s;
+    }
+    .back-link:hover { color: #fff; }
+    .back-link svg {
+      width: 16px;
+      height: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <a href="/">
+        <img src="assets/images/logo.png" alt="w.ai logo">
+      </a>
+    </div>
+
+    <a href="/" class="back-link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M19 12H5M12 19l-7-7 7-7"/>
+      </svg>
+      Back to Globe
+    </a>
+
+    <h1>GPU Earnings Calculator</h1>
+    <p class="subtitle">Expected daily points for single-GPU workers (7-day median, min 24h active)</p>
+
+    <input type="text" class="search-input" id="search" placeholder="Search for your GPU (e.g., RTX 4090, M2, 3060...)" autofocus>
+
+    <div class="stats" id="stats" style="display: none;">
+      <div class="stat">
+        <div class="stat-value" id="stat-pts-day">-</div>
+        <div class="stat-label">Points / Day</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value" id="stat-pts-hour">-</div>
+        <div class="stat-label">Points / Hour</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value" id="stat-vram">-</div>
+        <div class="stat-label">VRAM</div>
+      </div>
+    </div>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th data-sort="gpu">GPU Model</th>
+            <th data-sort="vram">VRAM</th>
+            <th data-sort="ptsDay">Pts/Day</th>
+            <th data-sort="ptsHour">Pts/Hr</th>
+            <th data-sort="workers">Workers</th>
+            <th>Range (P25-P75)</th>
+          </tr>
+        </thead>
+        <tbody id="results"></tbody>
+      </table>
+    </div>
+
+    <div class="no-results" id="no-results" style="display: none;">
+      No GPUs found matching your search
+    </div>
+
+    <div class="footer-links">
+      <a href="/">Home</a>
+      <a href="/privacy-policy">Privacy Policy</a>
+      <a href="/terms-of-services">Terms of Service</a>
+    </div>
+  </div>
+
+  <script>
+    const gpuData = `gpu_model	vram_gb	workers	total_points_all	total_tasks_all	points_per_day	points_per_hour	p25_day	p75_day	avg_active_hours
+NVIDIA H100 80GB HBM3	79.2	5	3242996	74693	93334	3889	91545	93346	167.9
+NVIDIA RTX 5090	31.3	6	3191771	214546	70444	2935	66769	86727	167.9
+NVIDIA RTX 5090	31.4	20	7449195	309784	60375	2516	41542	78232	150.4
+NVIDIA RTX 5090	31.8	4	410353	33366	49887	2079	46074	49887	62.2
+Tesla V100-SXM2-16GB	15.8	11	2551072	247336	44475	1853	41809	46896	126.1
+NVIDIA RTX 3090	23.6	11	2825172	101232	40863	1703	36426	75628	129.4
+NVIDIA RTX 5070 Ti	15.5	4	994701	143158	40603	1692	37497	43708	148.5
+Apple M4 Max	36	6	962600	93822	40355	1681	22398	58312	102.7
+NVIDIA RTX 3080 Ti	11.6	47	12504370	1226492	39793	1658	38280	40797	164
+NVIDIA RTX 4090	22.5	7	1047629	133256	37400	1558	704	37400	158.7
+NVIDIA RTX 4090	23.5	11	2029751	97344	36190	1508	18829	71031	85.4
+NVIDIA RTX 3080	9.6	9	2394399	214232	35233	1468	34405	42982	165.5
+Apple M2 Max	32	12	1677079	271179	30234	1260	16543	31703	145.7
+Apple M2 Pro	32	3	177990	32361	27640	1152	27640	27640	51.5
+NVIDIA RTX 4070 Ti	12	17	2350607	331722	26255	1094	11174	30308	130.5
+NVIDIA RTX 5070 Ti	15.9	17	2591395	371173	24843	1035	5075	33329	147.1
+NVIDIA RTX 3060	11.8	10	1390157	225740	24624	1026	24530	28001	135.2
+NVIDIA RTX 5070	11.9	5	825568	105827	23565	982	19300	26102	153.7
+NVIDIA RTX 5060 Ti	15.5	3	365684	50127	22647	944	20493	23604	127.4
+NVIDIA L20	44.4	6	602061	61548	21627	901	15824	21627	118.4
+NVIDIA RTX A6000	48	3	451100	54969	21511	896	21511	21511	167.8
+NVIDIA RTX 4090	24	9	876987	83615	21138	881	9313	21138	125
+AMD Radeon RX 7700 XT	11.7	3	220422	30756	16633	693	16633	16633	106
+NVIDIA RTX 3060	11.6	3	193135	42798	16548	689	16548	17399	91.7
+NVIDIA RTX 5080	15.9	6	636446	83208	16259	677	12080	20438	109.8
+NVIDIA RTX 3090	24	16	1619132	310806	14374	599	10609	25230	140.9
+Apple M4 Pro	24	15	1442069	240015	14238	593	13655	24808	133.7
+Apple M2	8	86	6548715	3671721	13744	573	6466	17524	143.4
+NVIDIA RTX 5060 Ti	15.9	46	3816776	695560	13464	561	8527	19540	142.6
+NVIDIA RTX 5060	8	14	911169	202695	12137	506	3482	12506	120.2
+AMD Radeon RX 9060 XT	15.9	3	185556	22773	12002	500	10987	13017	85.1
+NVIDIA RTX 4070 SUPER	12	11	869166	188696	11458	477	7171	12423	122.9
+NVIDIA RTX 3080	10	45	2887706	518970	10287	429	6150	12437	140.7
+Apple M4	16	290	17393200	4606691	9855	411	7517	11723	135.6
+NVIDIA RTX 3070	8	209	13071330	3116814	9703	404	9070	10082	152.9
+NVIDIA RTX 4060 Ti	16	24	1439612	286200	9428	393	3695	12633	130.1
+Apple M4	24	10	576780	89502	9378	391	7037	10674	102.1
+AMD Radeon VII	15.7	3	160737	20013	9243	385	7865	10621	78.2
+NVIDIA RTX 3060	12	142	8097552	1701788	9075	378	4846	16614	144.3
+AMD Radeon RX 6700 XT	12	7	372746	75594	8953	373	8740	12460	117.7
+NVIDIA RTX 4070 Ti SUPER	16	13	696461	111236	8823	368	853	13939	106.9
+NVIDIA GTX 1080	7.9	3	134398	20820	8072	336	3187	9581	74.7
+NVIDIA RTX 4070	12	21	1104915	228756	7978	332	4147	9312	127.9
+Apple M2	16	26	1183972	284088	7569	315	5521	11083	124.5
+Apple M4	32	8	358594	55234	7245	302	2473	7315	115.7
+Apple M1 Pro	16	6	247946	52316	7003	292	1443	7495	97.7
+NVIDIA RTX 3070 Ti	8	21	892989	154360	6701	279	4599	9162	131.7
+NVIDIA GTX 1080 Ti	11	8	294953	59216	6399	267	6166	6925	122.9
+AMD Radeon RX 6700 XT	11.7	5	177825	46298	5575	232	2195	7957	98.7
+NVIDIA RTX 3050	6	84	2763685	826428	5461	228	2021	7122	135.7
+NVIDIA GTX 1070	8	32	1045295	207968	5377	224	2541	6683	128.9
+NVIDIA GTX 1660	6	19	555199	129092	5164	215	4139	5704	120.5
+Apple M1	16	5	148949	34308	5075	211	685	5443	96.9
+NVIDIA RTX 2060	12	24	717952	221068	5004	208	1946	16070	112.5
+NVIDIA RTX 2070 Super with Max-Q Design	8	3	75823	14908	4819	201	4196	5479	69.4
+NVIDIA GTX 1070 Ti	8	6	166025	36332	4801	200	1234	7808	106
+NVIDIA RTX 2060 SUPER	8	23	634696	153136	4666	194	3861	8150	118.6
+NVIDIA RTX 4080 SUPER	16	10	278946	50684	4626	193	2981	5004	99
+NVIDIA RTX 3060 Ti	8	32	912780	209460	4450	185	952	7607	121.3
+NVIDIA RTX 4080 Laptop GPU	12	4	87814	13740	4222	176	322	4222	66.5
+NVIDIA GTX 1080	8	8	188851	37228	4119	172	2851	7424	101.3
+NVIDIA RTX 4060 Laptop GPU	8	52	1360689	330912	4095	171	1978	7424	122.1
+NVIDIA RTX 3070 Laptop GPU	8	7	157025	32612	4057	169	1393	6197	91.9
+NVIDIA GTX 1660 Ti	6	31	787007	174368	4028	168	1634	7491	118.9
+NVIDIA RTX 3060	8	11	244073	62008	3912	163	3347	4624	106.3
+NVIDIA GTX 1060 3GB	3	41	898978	253924	3823	159	2454	4918	121.9
+Radeon RX 580 Series	3.8	4	81896	18068	3789	158	3789	4158	88.4
+NVIDIA GTX 1050	3	6	115638	34904	3728	155	1736	3728	99.3
+NVIDIA P104-100	8	42	923376	206292	3586	149	3114	6641	113.5
+AMD Radeon RX 6600	7.7	25	532704	143924	3519	147	1849	5887	115.9
+NVIDIA RTX 4060 Ti	8	17	354149	82304	3365	140	2077	5175	105.7
+NVIDIA GTX 1060 6GB	6	56	1121036	279880	3244	135	962	4983	119.7
+NVIDIA GTX 980 Ti	6	6	97986	23040	3249	135	1949	3672	92.2
+NVIDIA RTX 4060	8	114	2228878	540904	2980	124	1805	6982	126.5
+Quadro P1000	4	5	66855	21276	2764	115	1751	3606	81.1
+NVIDIA GTX 970	4	4	51752	13752	2733	114	730	2733	77.7
+Quadro T2000	4	4	46648	11812	2703	113	2068	3033	73.6
+Apple M1	8	36	531178	150560	2673	111	832	6406	106.5
+NVIDIA GTX 1650	4	101	1609913	463456	2687	112	993	4812	113.5
+NVIDIA RTX 4070 Laptop GPU	8	20	316927	73616	2615	109	2053	3640	109.5
+Radeon (TM) RX 470 Graphics	3.8	5	65946	17320	2446	102	391	2455	94.2
+NVIDIA GTX 1650 Ti	4	16	206606	53804	2411	100	1463	5145	103.5
+NVIDIA RTX 2060	6	42	554951	161692	2135	89	298	4143	114.4
+NVIDIA RTX 2070 SUPER	8	4	46078	10096	2016	84	1371	5990	69.7
+AMD Radeon RX 6500 XT	3.7	5	54115	14020	2008	84	1374	5888	77.2
+NVIDIA GTX 1060	6	6	67149	17960	2003	83	1476	4604	84.5
+NVIDIA GTX 1050 Ti	4	90	1050908	317524	1941	81	493	3743	112.2
+NVIDIA GTX 1050	4	12	121692	36280	1797	75	1391	2396	101.1
+NVIDIA GTX 1660 SUPER	6	68	770823	201632	1790	75	656	3621	113.2
+AMD Radeon(TM) Graphics	3.8	18	185167	52340	1799	75	1340	2611	103.1
+NVIDIA RTX 3050	8	17	152339	38156	1646	69	1268	5478	80.4
+NVIDIA RTX 3050 Ti Laptop GPU	4	47	460816	124272	1642	68	913	3680	109.3
+NVIDIA RTX 3050 Laptop GPU	4	63	620619	167272	1669	70	538	2437	108.5
+Radeon RX550/550 Series	3.8	19	155193	47020	1530	64	1134	2513	96.3
+Radeon RX 570 Series	3.8	12	102336	30204	1574	66	1175	4002	99.4
+NVIDIA GTX 750 Ti	4	10	75620	21584	1459	61	1036	1896	94.7
+NVIDIA RTX 3060 Laptop GPU	6	28	197339	51044	1230	51	240	3307	101.2
+Intel(R) UHD Graphics 770	3.8	6	31997	9804	1027	43	927	1228	82.5
+Radeon RX 570 Series	7.8	10	54832	16836	979	41	95	1757	98.3
+AMD Radeon RX 580 2048SP	7.8	62	375032	114796	993	41	585	2689	106.4
+Radeon RX 580 Series	7.8	21	133052	41844	966	40	397	2036	104.7
+NVIDIA RTX 2050	4	55	302832	83296	913	38	699	2230	103.9
+NVIDIA RTX 5070 Laptop GPU	8	4	22179	4696	852	35	311	852	51.5
+NVIDIA RTX 3050 6GB Laptop GPU	6	21	110432	27668	873	36	291	2116	96.8
+NVIDIA RTX 4050 Laptop GPU	6	63	313048	81328	838	35	278	2592	99.3
+NVIDIA GTX 1650 SUPER	4	8	37139	10488	770	32	729	2303	84.7
+Intel(R) UHD Graphics 730	3.9	10	35648	11416	720	30	534	989	92.1
+Radeon RX 560 Series	3.8	5	19195	6052	755	31	755	1472	70
+AMD Radeon RX 6600	8	7	19055	5360	428	18	196	3905	70.1
+Intel(R) HD Graphics 630	3.9	9	23083	7760	413	17	56	757	95.2
+Intel(R) UHD Graphics 770	7.8	5	9920	3080	409	17	156	409	84
+Intel(R) UHD Graphics	5.9	6	15087	5304	410	17	169	1012	85.5
+Intel(R) UHD Graphics 630	11.9	5	9268	2764	333	14	226	422	83
+Intel(R) UHD Graphics 770	7.9	9	16070	5216	295	12	114	641	90.9
+Intel(R) HD Graphics 530	4	4	5424	1820	257	11	41	278	79.9
+Intel(R) HD Graphics 530	3.9	9	13007	4556	226	9	33	606	94.2
+Intel(R) UHD Graphics 630	15.9	6	8167	2592	216	9	26	412	94.5
+Intel(R) UHD Graphics 730	7.9	23	34428	11312	218	9	66	408	99.9
+Intel(R) UHD Graphics 630	5.9	5	6181	2060	206	9	138	706	82.7
+Intel(R) UHD Graphics	3.8	25	34023	11852	193	8	20	499	107.8
+Intel(R) HD Graphics 630	4.1	5	4998	1656	170	7	47	301	82.1
+Intel(R) Iris(R) Xe Graphics	7.8	36	43393	14668	175	7	92	363	106.5
+Intel(R) UHD Graphics 630	3.9	34	41209	13776	176	7	78	455	104.2
+Intel(R) HD Graphics 530	8	4	3472	1120	157	7	50	157	87.7
+Intel(R) HD Graphics 630	8	4	3220	1072	146	6	34	172	91.5
+Intel(R) UHD Graphics	3.9	42	42579	14944	140	6	60	254	109.7
+Intel(R) UHD Graphics	7.9	14	11854	4152	128	5	4	174	104.2
+Microsoft Direct3D12 (AMD Radeon(TM) Graphics)	3.6	5	5167	1728	137	6	99	839	80.1
+Intel(R) Iris(R) Xe Graphics	3.9	28	22761	7720	118	5	39	409	104.1
+Intel(R) UHD Graphics 630	4	8	5249	1716	102	4	71	174	100.1
+Microsoft Direct3D12 (AMD Radeon(TM) Graphics)	7.7	5	2923	936	97	4	77	118	85.7
+Intel(R) HD Graphics 630	7.9	11	6890	2360	95	4	60	162	103.4
+Intel(R) UHD Graphics 620	3.9	20	11955	4140	94	4	24	145	105.9
+Intel(R) UHD Graphics 630	7.9	17	10388	3500	89	4	51	150	107.5
+Microsoft Direct3D12 (AMD Radeon(TM) Graphics)	3.7	5	2936	960	95	4	72	162	85.6
+Intel(R) Iris(R) Xe Graphics	3.8	8	4126	1392	79	3	65	141	99.7
+Intel(R) HD Graphics 620	3.9	14	6766	2380	76	3	45	294	103.6
+Intel(R) Iris(R) Xe Graphics	7.9	31	15034	5236	68	3	21	148	109.5
+Intel(R) UHD Graphics	7.8	11	4769	1692	65	3	28	202	99.4
+Intel(R) UHD Graphics 730	15.9	6	2319	792	58	2	24	144	96.6
+Intel(R) Iris(R) Xe Graphics	15.8	8	2949	1000	56	2	45	176	98.4
+Intel(R) UHD Graphics 620	4.1	7	2686	924	56	2	9	197	98.7
+Intel(R) HD Graphics 530	15.9	4	1076	364	46	2	44	152	90.4
+Intel(R) UHD Graphics	4	14	4418	1536	44	2	21	88	107.1
+Intel(R) HD Graphics 520	4	9	2828	984	50	2	20	166	101.5
+Intel(R) UHD Graphics 620	7.9	25	7617	2644	41	2	15	84	111.2
+Intel(R) HD Graphics 620	7.9	8	2204	760	41	2	21	67	102.1
+Intel(R) HD Graphics 520	7.9	5	1173	412	37	2	33	136	97.7
+Intel(R) HD Graphics 530	7.9	10	1767	608	25	1	19	112	96.4
+Intel(R) HD Graphics 520	3.9	24	4037	1432	22	1	7	69	112.2
+Intel(R) HD Graphics Gen11	3.9	5	545	188	16	1	11	23	88.2
+Intel(R) HD Graphics 520	4.1	5	245	92	6	0	5	168	71.3
+Intel(R) HD Graphics Gen11	4	5	118	44	3	0	3	13	83.9`;
+
+    const rows = gpuData.trim().split('\n').slice(1).map(line => {
+      const [gpu, vram, workers, totalPts, totalTasks, ptsDay, ptsHour, p25, p75, avgHours] = line.split('\t');
+      return {
+        gpu: gpu.replace('convergence', ''),
+        vram: parseFloat(vram),
+        workers: parseInt(workers),
+        ptsDay: parseInt(ptsDay),
+        ptsHour: parseInt(ptsHour),
+        p25: parseInt(p25),
+        p75: parseInt(p75)
+      };
+    });
+
+    let sortField = 'ptsDay';
+    let sortDir = -1;
+    let selectedRow = null;
+
+    function render(filter = '') {
+      const tbody = document.getElementById('results');
+      const noResults = document.getElementById('no-results');
+      const stats = document.getElementById('stats');
+      const tableWrapper = document.querySelector('.table-wrapper');
+
+      const terms = filter.toLowerCase().split(/\s+/).filter(t => t);
+      let filtered = rows.filter(r =>
+        terms.every(term => r.gpu.toLowerCase().includes(term))
+      );
+
+      filtered.sort((a, b) => {
+        if (sortField === 'gpu') {
+          return a.gpu.localeCompare(b.gpu) * sortDir;
+        }
+        return (a[sortField] - b[sortField]) * sortDir;
+      });
+
+      // Update sort indicators
+      document.querySelectorAll('th[data-sort]').forEach(th => {
+        th.classList.toggle('sorted', th.dataset.sort === sortField);
+      });
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = '';
+        noResults.style.display = 'block';
+        tableWrapper.style.display = 'none';
+        stats.style.display = 'none';
+        return;
+      }
+
+      noResults.style.display = 'none';
+      tableWrapper.style.display = 'block';
+
+      // Auto-select first result if searching
+      if (filter && filtered.length > 0) {
+        selectedRow = filtered[0];
+        stats.style.display = 'grid';
+        document.getElementById('stat-pts-day').textContent = selectedRow.ptsDay.toLocaleString();
+        document.getElementById('stat-pts-hour').textContent = selectedRow.ptsHour.toLocaleString();
+        document.getElementById('stat-vram').textContent = selectedRow.vram + ' GB';
+      } else {
+        stats.style.display = 'none';
+        selectedRow = null;
+      }
+
+      tbody.innerHTML = filtered.map(r => `
+        <tr class="${selectedRow === r ? 'selected' : ''}" data-gpu="${encodeURIComponent(r.gpu)}" data-vram="${r.vram}">
+          <td class="gpu-name">${highlight(r.gpu, terms)}</td>
+          <td class="number vram">${r.vram} GB</td>
+          <td class="number pts-day">${r.ptsDay.toLocaleString()}</td>
+          <td class="number pts-hour">${r.ptsHour.toLocaleString()}</td>
+          <td class="number workers">${r.workers}</td>
+          <td class="number range">${r.p25.toLocaleString()} - ${r.p75.toLocaleString()}</td>
+        </tr>
+      `).join('');
+
+      // Add click handlers
+      tbody.querySelectorAll('tr').forEach(tr => {
+        tr.addEventListener('click', () => selectRow(tr));
+      });
+    }
+
+    function highlight(text, terms) {
+      if (!terms.length) return text;
+      let result = text;
+      terms.forEach(term => {
+        const regex = new RegExp(`(${term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+        result = result.replace(regex, '<span class="highlight">$1</span>');
+      });
+      return result;
+    }
+
+    function selectRow(el) {
+      const gpu = decodeURIComponent(el.dataset.gpu);
+      const vram = parseFloat(el.dataset.vram);
+      const row = rows.find(r => r.gpu === gpu && r.vram === vram);
+      if (row) {
+        selectedRow = row;
+        document.getElementById('stats').style.display = 'grid';
+        document.getElementById('stat-pts-day').textContent = row.ptsDay.toLocaleString();
+        document.getElementById('stat-pts-hour').textContent = row.ptsHour.toLocaleString();
+        document.getElementById('stat-vram').textContent = row.vram + ' GB';
+        document.querySelectorAll('tr').forEach(tr => tr.classList.remove('selected'));
+        el.classList.add('selected');
+      }
+    }
+
+    document.getElementById('search').addEventListener('input', e => render(e.target.value));
+
+    document.querySelectorAll('th[data-sort]').forEach(th => {
+      th.addEventListener('click', () => {
+        const field = th.dataset.sort;
+        if (sortField === field) sortDir *= -1;
+        else { sortField = field; sortDir = field === 'gpu' ? 1 : -1; }
+        render(document.getElementById('search').value);
+      });
+    });
+
+    render();
+  </script>
+</body>
+</html>
