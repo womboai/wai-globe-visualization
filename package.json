@@ -1,0 +1,22 @@
+{
+  "name": "wai-globe-visualization",
+  "version": "1.0.0",
+  "description": "Real-time 3D globe visualization of the W.AI distributed compute network.",
+  "main": "server.py",
+  "scripts": {
+    "css:clean": "cleancss -o assets/css/style-temp.css assets/css/style.original.css",
+    "css:purge": "purgecss --css assets/css/style-temp.css --content '*.html' --safelist w-mod-js w-mod-touch w-form-done w-form-fail --output assets/css/",
+    "css:rename": "mv assets/css/style-temp.css assets/css/style.css",
+    "css:build": "npm run css:clean && npm run css:purge && npm run css:rename"
+  },
+  "keywords": ["w.ai", "globe", "visualization", "decentralized", "ai"],
+  "author": "W.AI",
+  "license": "ISC",
+  "engines": {
+    "node": ">=22"
+  },
+  "devDependencies": {
+    "clean-css-cli": "^5.6.3",
+    "purgecss": "^7.0.2"
+  }
+}
