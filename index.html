@@ -1,220 +1,591 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>W.AI Network</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@200;300;400;500&display=swap');
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      background: #000;
-      overflow: hidden;
-      font-family: 'JetBrains Mono', monospace;
-    }
-    #globe { width: 100vw; height: 100vh; }
+  <!-- Primary Meta Tags -->
+  <title>w.ai - Global AI Supercomputer</title>
+  <meta name="title" content="w.ai - Global AI Supercomputer">
+  <meta name="description" content="w.ai turns your device into a passive income stream. Securely share computing power & help power the next generation of AI. Brought to you by the WOMBO Team (Backed by NVIDIA).">
+  <meta name="keywords" content="W.AI, AI supercomputer, decentralized computing, GPU sharing, distributed AI, machine learning, compute network, crypto, blockchain AI">
+  <meta name="author" content="W.AI">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://w.ai/">
 
-    .overlay {
-      position: absolute;
-      color: #00ff88;
-      z-index: 100;
-    }
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://w.ai/">
+  <meta property="og:title" content="w.ai - Global AI Supercomputer">
+  <meta property="og:description" content="w.ai turns your device into a passive income stream. Securely share computing power & help power the next generation of AI. Brought to you by the WOMBO Team (Backed by NVIDIA).">
+  <meta property="og:image" content="https://w.ai/assets/images/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="w.ai">
+  <meta property="og:locale" content="en_US">
 
-    /* Logo */
-    .logo {
-      top: 40px;
-      left: 48px;
-      font-size: 20px;
-      font-weight: 400;
-      letter-spacing: 12px;
-      opacity: 0.9;
-      text-shadow: 0 0 30px #00ff8855;
-    }
-    .logo::before {
-      content: '◉';
-      margin-right: 16px;
-      opacity: 0.6;
-      font-size: 10px;
-      animation: pulse 3s ease-in-out infinite;
-    }
-    @keyframes pulse {
-      0%, 100% { opacity: 0.4; }
-      50% { opacity: 1; text-shadow: 0 0 10px #00ff88; }
-    }
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@wai_protocol">
+  <meta name="twitter:creator" content="@wai_protocol">
+  <meta name="twitter:url" content="https://w.ai/">
+  <meta name="twitter:title" content="w.ai - Global AI Supercomputer">
+  <meta name="twitter:description" content="w.ai turns your device into a passive income stream. Securely share computing power & help power the next generation of AI. Brought to you by the WOMBO Team (Backed by NVIDIA).">
+  <meta name="twitter:image" content="https://w.ai/assets/images/og-image.png">
 
-    /* Stats */
-    .stats {
-      bottom: 48px;
-      left: 48px;
-      display: flex;
-      gap: 64px;
-    }
-    .stat {
-      position: relative;
-    }
-    .stat::before {
-      content: '';
-      position: absolute;
-      top: -16px;
-      left: 0;
-      width: 24px;
-      height: 1px;
-      background: linear-gradient(90deg, #00ff88 0%, transparent 100%);
-      opacity: 0.4;
-    }
-    .stat-value {
-      font-size: 32px;
-      font-weight: 200;
-      letter-spacing: 3px;
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    .stat-value.updated {
-      color: #fff;
-      text-shadow: 0 0 30px #00ff88, 0 0 60px #00ff88;
-    }
-    .stat-label {
-      font-size: 8px;
-      letter-spacing: 5px;
-      opacity: 0.3;
-      margin-top: 8px;
-      font-weight: 300;
-    }
+  <!-- Additional SEO -->
+  <meta name="theme-color" content="#000000">
+  <meta name="msapplication-TileColor" content="#000000">
+  <meta name="application-name" content="W.AI">
+  <meta name="apple-mobile-web-app-title" content="W.AI">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-    /* Live indicator */
-    .live-indicator {
-      bottom: 48px;
-      right: 48px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 8px;
-      letter-spacing: 5px;
-      opacity: 0.4;
-      font-weight: 300;
+  <!-- Structured Data for SEO & AEO (AI/Answer Engines) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "W.AI",
+    "url": "https://w.ai",
+    "logo": "https://w.ai/assets/images/logo.png",
+    "description": "W.AI is a global decentralized AI supercomputer network that allows users to share computing power and access AI models.",
+    "sameAs": [
+      "https://twitter.com/wai_protocol",
+      "https://discord.gg/w-ai",
+      "https://instagram.com/wai_protocol",
+      "https://t.me/+bgEDtwLmYC8wZmUx"
+    ],
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "contactType": "customer support",
+      "url": "https://discord.gg/w-ai"
     }
-    .dot {
-      width: 6px;
-      height: 6px;
-      background: #00ff88;
-      border-radius: 50%;
-      animation: breathe 2.5s ease-in-out infinite;
-      box-shadow: 0 0 8px #00ff88;
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "W.AI",
+    "url": "https://w.ai",
+    "description": "Global Decentralized AI Supercomputer",
+    "publisher": {
+      "@type": "Organization",
+      "name": "W.AI"
     }
-    @keyframes breathe {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.3; transform: scale(0.8); }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "W.AI Network",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Cross-platform",
+    "description": "Share your device's unused computing power and earn rewards while contributing to a global AI supercomputer network.",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
     }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is W.AI?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "W.AI is a global decentralized AI supercomputer that allows users to share their device's unused computing power with others and get paid for it."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I earn with W.AI?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "You can earn by sharing your device's unused computing power with the W.AI network. Your device contributes to AI model processing and you receive rewards in return."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What can I do with W.AI?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "You can access and run the latest AI models through the W.AI platform, or contribute your computing resources to earn rewards."
+        }
+      }
+    ]
+  }
+  </script>
 
-    /* Timestamp */
-    .timestamp {
-      top: 48px;
-      right: 48px;
-      font-size: 9px;
-      letter-spacing: 2px;
-      opacity: 0.25;
-      font-weight: 300;
-    }
+  <!-- Preconnect for Performance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://unpkg.com">
+  <link rel="dns-prefetch" href="https://www.googletagmanager.com">
+  <link rel="dns-prefetch" href="https://www.google-analytics.com">
 
-    /* Update flash */
-    .update-flash {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: radial-gradient(ellipse at center, rgba(0, 255, 136, 0.03) 0%, transparent 60%);
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.2s ease-out;
-    }
-    .update-flash.active {
-      opacity: 1;
-    }
+  <!-- Styles -->
+  <link href="assets/css/style.css" rel="stylesheet" type="text/css">
 
-    /* Scanlines - subtler */
-    .scanlines {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      background: repeating-linear-gradient(
-        0deg,
-        rgba(0, 0, 0, 0.03) 0px,
-        rgba(0, 0, 0, 0.03) 1px,
-        transparent 1px,
-        transparent 2px
-      );
-      opacity: 0.5;
-      z-index: 1000;
-    }
+  <!-- Webfont loader -->
+  <script src="assets/js/webfont.js" type="text/javascript"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:regular,500,600,700,800" media="all">
+  <script type="text/javascript">
+    WebFont.load({ google: { families: ["Inter:regular,500,600,700,800"] }});
+  </script>
 
-    /* Vignette - subtler */
-    .vignette {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      background: radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.5) 100%);
-      z-index: 999;
-    }
+  <!-- Webflow JS feature detection -->
+  <script type="text/javascript">
+    !function(o,c){var n=c.documentElement,t=" w-mod-";n.className+=t+"js",("ontouchstart"in o||o.DocumentTouch&&c instanceof DocumentTouch)&&(n.className+=t+"touch")}(window,document);
+  </script>
 
-    /* Corner accents */
-    .corner {
-      position: fixed;
-      width: 40px;
-      height: 40px;
-      border-color: #00ff8815;
-      border-style: solid;
-      border-width: 0;
-      z-index: 998;
-    }
-    .corner.tl { top: 24px; left: 24px; border-top-width: 1px; border-left-width: 1px; }
-    .corner.tr { top: 24px; right: 24px; border-top-width: 1px; border-right-width: 1px; }
-    .corner.bl { bottom: 24px; left: 24px; border-bottom-width: 1px; border-left-width: 1px; }
-    .corner.br { bottom: 24px; right: 24px; border-bottom-width: 1px; border-right-width: 1px; }
-  </style>
+  <!-- Favicon -->
+  <link href="assets/images/favicon.jpg" rel="shortcut icon" type="image/jpeg">
+  <link href="assets/images/favicon.jpg" rel="apple-touch-icon">
+
+  <!-- Google Analytics (optional - remove if not needed) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y2KF8PNKR4"></script>
+  <script type="text/javascript">
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-Y2KF8PNKR4', {'anonymize_ip': false});
+  </script>
+
+  <!-- Google Tag Manager (optional - remove if not needed) -->
+  <script>
+    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-PJV459B');
+  </script>
+
+  <!-- Webflow Currency Settings -->
+  <script type="text/javascript">
+    window.__WEBFLOW_CURRENCY_SETTINGS = {"currencyCode":"USD","symbol":"$","decimal":".","fractionDigits":2,"group":",","template":"{{wf {\"path\":\"symbol\",\"type\":\"PlainText\"} }} {{wf {\"path\":\"amount\",\"type\":\"CommercePrice\"} }} {{wf {\"path\":\"currencyCode\",\"type\":\"PlainText\"} }}","hideDecimalForWholeNumbers":false};
+  </script>
 </head>
-<body>
-  <div id="globe"></div>
-  <div class="scanlines"></div>
-  <div class="vignette"></div>
-  <div class="update-flash" id="flash"></div>
-  <div class="corner tl"></div>
-  <div class="corner tr"></div>
-  <div class="corner bl"></div>
-  <div class="corner br"></div>
 
-  <div class="overlay logo">W.AI</div>
-  <div class="overlay timestamp" id="timestamp"></div>
+<body class="black-body">
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PJV459B" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
-  <div class="overlay stats">
-    <div class="stat">
-      <div class="stat-value" id="nodes">—</div>
-      <div class="stat-label">ACTIVE NODES</div>
+
+
+  <!-- Custom Embedded Styles -->
+  <div class="w-embed">
+    <style>
+      * {
+        text-rendering: geometricPrecision;
+      }
+      *::-webkit-scrollbar {
+        display: none;
+      }
+      .* {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+      body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background: #000;
+      }
+      .landing {
+        background: #000;
+        min-height: 100vh;
+      }
+      .bg-video {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+        background: #000;
+      }
+      .bg-scrim {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.3);
+        z-index: 1;
+      }
+
+      /* menu load in */
+      .menu {
+        animation: loadIn .6s cubic-bezier(.17,.67,.23,1) forwards;
+        opacity: 0;
+      }
+      .logo .menu { animation-delay: 0s; }
+      .status .menu { animation-delay: .3s; }
+      .intel .menu { animation-delay: .6s; }
+      .updates .menu { animation-delay: .9s; }
+      @keyframes loadIn {
+        0% {opacity: 0;}
+        100% {opacity: 1;}
+      }
+
+      /* animated border gradient */
+      .menu:before {
+        content: "";
+        position: absolute;
+        z-index: -1;
+        inset: 0;
+        padding: 1px;
+        border-radius: 12px;
+        background: linear-gradient(-45deg, #0344F5, #4AD640, #FDC803, #F37902, #EB2525, #0344F5, #4AD640, #FDC803, #F37902, #EB2525, #0344F5);
+        -webkit-mask:
+           linear-gradient(#fff 0 0) content-box,
+           linear-gradient(#fff 0 0);
+        mask:
+           linear-gradient(#fff 0 0) content-box,
+           linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        background-size: 220% 100%;
+        animation: borderGradient 2s ease infinite;
+      }
+      @keyframes borderGradient {
+        0% {background-position: 100% 0%}
+        100% {background-position: 0% 0%}
+      }
+
+      /* blinking dot */
+      .active-dot {
+        animation: ease-in-out 2s dotBlink infinite;
+      }
+      @keyframes dotBlink {
+        0% {opacity: 1;}
+        50% {opacity: 0.3;}
+        100% {opacity: 1;}
+      }
+
+      /* loading bar */
+      .loading-bar-wrapper {
+        width: 0%;
+        animation: loadingExpand 4s forwards;
+        animation-timing-function: cubic-bezier(.07,.77,.42,1);
+      }
+      @keyframes loadingExpand {
+        0% {width: 0%}
+        100% {width: 69%}
+      }
+
+      .loading-bar {
+        background: linear-gradient(to right, #0344F5, #4AD640, #FDC803, #F37902, #EB2525, #0344F5, #4AD640, #FDC803, #F37902, #EB2525, #0344F5);
+        background-size: 400px 100%;
+        animation: loadingGradient 8s linear infinite;
+      }
+      @keyframes loadingGradient {
+        0% {background-position:0px 0%}
+        100% {background-position:400px 0%}
+      }
+
+      @media screen and (max-width: 479px) {
+        .heading-new.main {
+          font-size: calc(14vw - 23px);
+        }
+      }
+    </style>
+  </div>
+
+  <!-- Main Landing Section -->
+  <section class="landing">
+    <!-- Background -->
+    <div class="bg-video">
+      <div class="bg-scrim"></div>
     </div>
-    <div class="stat">
-      <div class="stat-value" id="cities">—</div>
-      <div class="stat-label">CITIES</div>
+
+    <!-- Logo Section -->
+    <div class="logo">
+      <div class="menu">
+        <div class="menu-content-horizontal">
+          <img src="assets/images/logo.png" loading="lazy" alt="" class="logo-img">
+          <div class="logo-text">
+            <div class="caption">Coming soon</div>
+            <div class="heading-new main">Global AI Supercomputer</div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="stat">
-      <div class="stat-value" id="countries">—</div>
-      <div class="stat-label">COUNTRIES</div>
+
+    <!-- Status Section -->
+    <div class="status">
+      <div class="menu">
+        <div class="menu-content-space">
+          <div class="caption">System Status</div>
+          <div class="active-dot"></div>
+        </div>
+      </div>
+      <div class="menu">
+        <div class="menu-content-vertical">
+          <div class="menu-content-space">
+            <div class="caption">Loading...</div>
+            <div class="caption">69.1% Complete</div>
+          </div>
+          <div class="loading-bar-container">
+            <div class="loading-bar-wrapper">
+              <div class="loading-bar"></div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="stat">
-      <div class="stat-value" id="tps">—</div>
-      <div class="stat-label">TASKS/SEC</div>
+
+    <!-- Intel Section -->
+    <div class="intel">
+      <div class="menu">
+        <div class="menu-content-horizontal">
+          <div class="icon w-embed">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <g clip-path="url(#clip0_979_1621)">
+                <path d="M15.75 9V7.5H12.75V5.25H11.25V7.5H9.75C9.3523 7.5004 8.971 7.65856 8.68978 7.93978C8.40856 8.221 8.2504 8.6023 8.25 9V11.25C8.2504 11.6477 8.40856 12.029 8.68978 12.3102C8.971 12.5914 9.3523 12.7496 9.75 12.75H14.25V15H8.25V16.5H11.25V18.75H12.75V16.5H14.25C14.6477 16.4995 15.029 16.3414 15.3102 16.0602C15.5914 15.779 15.7495 15.3977 15.75 15V12.75C15.7496 12.3523 15.5914 11.971 15.3102 11.6898C15.029 11.4086 14.6477 11.2504 14.25 11.25H9.75V9H15.75Z" fill="#00FF00"/>
+                <path d="M12 3C13.78 3 15.5201 3.52784 17.0001 4.51677C18.4802 5.50571 19.6337 6.91131 20.3149 8.55585C20.9961 10.2004 21.1743 12.01 20.8271 13.7558C20.4798 15.5016 19.6226 17.1053 18.364 18.364C17.1053 19.6226 15.5016 20.4798 13.7558 20.8271C12.01 21.1743 10.2004 20.9961 8.55585 20.3149C6.91132 19.6337 5.50571 18.4802 4.51678 17.0001C3.52785 15.5201 3 13.78 3 12C3.00699 9.6152 3.95744 7.33007 5.64376 5.64375C7.33008 3.95744 9.6152 3.00698 12 3ZM12 1.5C9.9233 1.5 7.89323 2.11581 6.16652 3.26957C4.4398 4.42332 3.09399 6.0632 2.29927 7.98182C1.50455 9.90045 1.29661 12.0116 1.70176 14.0484C2.1069 16.0852 3.10693 17.9562 4.57538 19.4246C6.04383 20.8931 7.91476 21.8931 9.95156 22.2982C11.9884 22.7034 14.0996 22.4955 16.0182 21.7007C17.9368 20.906 19.5767 19.5602 20.7304 17.8335C21.8842 16.1068 22.5 14.0767 22.5 12C22.4919 9.21773 21.383 6.55175 19.4156 4.58438C17.4483 2.61702 14.7823 1.50815 12 1.5Z" fill="#00FF00"/>
+              </g>
+              <defs>
+                <clipPath id="clip0_979_1621">
+                  <rect width="24" height="24" fill="white"/>
+                </clipPath>
+              </defs>
+            </svg>
+          </div>
+          <div class="caption caption-width">Get paid to share your devices' unused computing power WITH OTHERS</div>
+        </div>
+      </div>
+      <div class="menu">
+        <div class="menu-content-horizontal">
+          <div class="icon w-embed">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <g clip-path="url(#clip0_1116_1325)">
+                <path d="M12 1.5C9.9233 1.5 7.89323 2.11581 6.16652 3.26957C4.4398 4.42332 3.09399 6.0632 2.29927 7.98182C1.50455 9.90045 1.29661 12.0116 1.70176 14.0484C2.1069 16.0852 3.10693 17.9562 4.57538 19.4246C6.04383 20.8931 7.91476 21.8931 9.95156 22.2982C11.9884 22.7034 14.0996 22.4955 16.0182 21.7007C17.9368 20.906 19.5767 19.5602 20.7304 17.8335C21.8842 16.1068 22.5 14.0767 22.5 12C22.5 9.21523 21.3938 6.54451 19.4246 4.57538C17.4555 2.60625 14.7848 1.5 12 1.5ZM21 11.25H16.5C16.4125 8.48781 15.6969 5.78186 14.4075 3.3375C16.1839 3.82342 17.7685 4.84263 18.9474 6.25757C20.1263 7.6725 20.8427 9.41504 21 11.25ZM12 21C11.8327 21.0112 11.6648 21.0112 11.4975 21C9.94372 18.5221 9.08139 15.6736 9 12.75H15C14.9254 15.6715 14.0709 18.5199 12.525 21C12.3502 21.0123 12.1748 21.0123 12 21ZM9 11.25C9.07462 8.32851 9.92914 5.48012 11.475 3C11.809 2.96247 12.1461 2.96247 12.48 3C14.0417 5.4756 14.9119 8.3243 15 11.25H9ZM9.57001 3.3375C8.28848 5.78373 7.5806 8.48959 7.5 11.25H3C3.15728 9.41504 3.87371 7.6725 5.0526 6.25757C6.23149 4.84263 7.81608 3.82342 9.5925 3.3375H9.57001ZM3.0375 12.75H7.53751C7.61577 15.5098 8.32108 18.2156 9.60001 20.6625C7.82915 20.1714 6.25109 19.1499 5.07792 17.7354C3.90475 16.3209 3.19271 14.5811 3.0375 12.75ZM14.4075 20.6625C15.6969 18.2181 16.4125 15.5122 16.5 12.75H21C20.8427 14.585 20.1263 16.3275 18.9474 17.7424C17.7685 19.1574 16.1839 20.1766 14.4075 20.6625Z" fill="#00FF00"/>
+              </g>
+              <defs>
+                <clipPath id="clip0_1116_1325">
+                  <rect width="24" height="24" fill="white"/>
+                </clipPath>
+              </defs>
+            </svg>
+          </div>
+          <div class="caption caption-width">ACCESS AND RUN THE LATEST AI MODELS THROUGH the W.AI PLATFORM</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Updates Section (Email Form) -->
+    <div class="updates">
+      <div class="menu">
+        <div class="menu-content-horizontal form-content">
+          <div class="caption">Get updates</div>
+          <div class="form-block w-form">
+            <form id="email-form" name="email-form" data-name="Email Form" method="get" class="updates-form" aria-label="Email Form">
+              <input class="field caption w-input" maxlength="256" name="email" data-name="Email" placeholder="Email Address" type="email" id="email" required>
+              <div class="cta-wrapper">
+                <input type="submit" data-wait="Please wait..." class="cta caption w-button" value="Submit">
+                <div class="cta-grad"></div>
+              </div>
+            </form>
+            <div class="success w-form-done" tabindex="-1" role="region" aria-label="Email Form success">
+              <div class="success-error-content">
+                <div class="caption">Submission Complete!</div>
+              </div>
+            </div>
+            <div class="error w-form-fail" tabindex="-1" role="region" aria-label="Email Form failure">
+              <div class="success-error-content">
+                <div class="caption">ErRor</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Social Links Section -->
+    <div class="updates">
+      <div class="social">
+        <!-- Discord -->
+        <a href="https://discord.gg/w-ai" target="_blank" class="w-inline-block">
+          <div class="menu">
+            <div class="icon w-embed">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M19.2748 5.32498C17.9248 4.72498 16.4998 4.27498 14.9998 3.97498H14.9248C14.7748 4.27498 14.5498 4.72498 14.3998 5.09998C12.7498 4.87498 11.1748 4.87498 9.59981 5.09998C9.44981 4.72498 9.22481 4.34998 9.07481 3.97498H8.99981C7.49981 4.19998 6.07481 4.64998 4.72481 5.32498C2.02481 9.37498 1.27481 13.35 1.64981 17.25V17.325C3.44981 18.675 5.17481 19.425 6.89981 19.95H6.97481C7.34981 19.425 7.72481 18.825 8.02481 18.225V18.15C7.42481 17.925 6.89981 17.7 6.37481 17.4C6.29981 17.4 6.29981 17.325 6.37481 17.325C6.44981 17.25 6.59981 17.175 6.67481 17.1H6.74981C10.1998 18.675 13.8748 18.675 17.3248 17.1H17.3998C17.4748 17.175 17.6248 17.25 17.6998 17.325C17.7748 17.325 17.6998 17.4 17.6998 17.4C17.1748 17.7 16.6498 18 16.0498 18.15C16.0498 18.15 15.9748 18.225 16.0498 18.225C16.3498 18.825 16.7248 19.425 17.0998 19.95H17.1748C18.8998 19.425 20.6248 18.6 22.4248 17.325V17.25C22.8748 12.75 21.6748 8.84998 19.2748 5.32498ZM8.54981 14.925C7.49981 14.925 6.67481 13.95 6.67481 12.825C6.67481 11.7 7.49981 10.725 8.54981 10.725C9.59981 10.725 10.4248 11.7 10.4248 12.825C10.4248 13.95 9.59981 14.925 8.54981 14.925ZM15.5248 14.925C14.4748 14.925 13.6498 13.95 13.6498 12.825C13.6498 11.7 14.4748 10.725 15.5248 10.725C16.5748 10.725 17.3998 11.7 17.3998 12.825C17.3998 13.95 16.5748 14.925 15.5248 14.925Z" fill="#00FF00"/>
+              </svg>
+            </div>
+          </div>
+        </a>
+        <!-- X/Twitter -->
+        <a href="https://x.com/wai_protocol" target="_blank" class="w-inline-block">
+          <div class="menu">
+            <div class="icon w-embed">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M8.661 19.314C15.453 19.314 19.1685 13.6868 19.1685 8.80652C19.1685 8.64677 19.1685 8.48777 19.1572 8.32952C19.8804 7.80672 20.5044 7.15906 21 6.41702C20.3262 6.7163 19.6112 6.9125 18.879 6.99902C19.6498 6.53735 20.2266 5.81129 20.502 4.95602C19.777 5.38565 18.9842 5.68873 18.1575 5.85227C17.6007 5.26018 16.8642 4.86811 16.0621 4.73673C15.26 4.60535 14.4369 4.74198 13.7203 5.12549C13.0037 5.509 12.4334 6.118 12.0977 6.85826C11.7621 7.59851 11.6798 8.42876 11.8635 9.22052C10.3953 9.14693 8.95899 8.76543 7.64778 8.10079C6.33658 7.43614 5.17979 6.5032 4.2525 5.36252C3.78073 6.17566 3.6364 7.13796 3.84887 8.05372C4.06133 8.96948 4.61464 9.76993 5.39625 10.2923C4.80853 10.2743 4.23368 10.1156 3.72 9.82952V9.87677C3.72023 10.7294 4.01535 11.5557 4.5553 12.2155C5.09525 12.8753 5.8468 13.3281 6.6825 13.497C6.13893 13.6456 5.56848 13.6671 5.01525 13.56C5.2512 14.2938 5.71058 14.9355 6.32916 15.3954C6.94774 15.8553 7.69458 16.1104 8.46525 16.125C7.6995 16.7267 6.82268 17.1715 5.88491 17.434C4.94714 17.6965 3.96682 17.7716 3 17.655C4.68866 18.739 6.6536 19.3142 8.66025 19.3118" fill="#00FF00"/>
+              </svg>
+            </div>
+          </div>
+        </a>
+        <!-- Instagram -->
+        <a href="https://www.instagram.com/wai_protocol/" target="_blank" class="w-inline-block">
+          <div class="menu">
+            <div class="icon w-embed">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M16.8046 8.27548C17.4011 8.27548 17.8846 7.79195 17.8846 7.19548C17.8846 6.59901 17.4011 6.11548 16.8046 6.11548C16.2081 6.11548 15.7246 6.59901 15.7246 7.19548C15.7246 7.79195 16.2081 8.27548 16.8046 8.27548Z" fill="#00FF00"/>
+                <path d="M11.9999 7.37848C11.0859 7.37848 10.1924 7.64953 9.43235 8.15734C8.67235 8.66516 8.08 9.38694 7.73021 10.2314C7.38042 11.0759 7.2889 12.0051 7.46722 12.9016C7.64554 13.7981 8.0857 14.6215 8.73203 15.2679C9.37835 15.9142 10.2018 16.3544 11.0983 16.5327C11.9948 16.711 12.924 16.6195 13.7685 16.2697C14.613 15.9199 15.3347 15.3275 15.8426 14.5675C16.3504 13.8075 16.6214 12.914 16.6214 12C16.6216 11.393 16.5022 10.792 16.27 10.2312C16.0378 9.67038 15.6974 9.16083 15.2683 8.73165C14.8391 8.30246 14.3295 7.96205 13.7687 7.72987C13.2079 7.49769 12.6069 7.37828 11.9999 7.37848ZM11.9999 15C11.4066 15 10.8266 14.824 10.3332 14.4944C9.83986 14.1647 9.45534 13.6962 9.22828 13.148C9.00122 12.5999 8.94181 11.9967 9.05756 11.4147C9.17332 10.8328 9.45904 10.2982 9.8786 9.87866C10.2982 9.4591 10.8327 9.17338 11.4146 9.05762C11.9966 8.94187 12.5998 9.00128 13.148 9.22834C13.6961 9.4554 14.1647 9.83992 14.4943 10.3333C14.824 10.8266 14.9999 11.4066 14.9999 12C14.9999 12.7956 14.6838 13.5587 14.1212 14.1213C13.5586 14.6839 12.7956 15 11.9999 15Z" fill="#00FF00"/>
+                <path d="M12 4.6215C14.403 4.6215 14.688 4.6305 15.6368 4.674C16.2074 4.68015 16.7728 4.78494 17.3077 4.98375C17.6959 5.13372 18.0484 5.36318 18.3426 5.65741C18.6368 5.95163 18.8663 6.30412 19.0162 6.69225C19.2151 7.22723 19.3199 7.79256 19.326 8.36325C19.3695 9.312 19.3785 9.597 19.3785 12.0007C19.3785 14.4045 19.3695 14.688 19.326 15.6368C19.3199 16.2074 19.2151 16.7728 19.0162 17.3077C18.8663 17.6959 18.6368 18.0484 18.3426 18.3426C18.0484 18.6368 17.6959 18.8663 17.3077 19.0162C16.7728 19.2151 16.2074 19.3199 15.6368 19.326C14.688 19.3695 14.403 19.3785 12 19.3785C9.597 19.3785 9.312 19.3695 8.36325 19.326C7.79256 19.3199 7.22723 19.2151 6.69225 19.0162C6.30412 18.8663 5.95163 18.6368 5.65741 18.3426C5.36318 18.0484 5.13372 17.6959 4.98375 17.3077C4.78494 16.7728 4.68015 16.2074 4.674 15.6368C4.6305 14.688 4.6215 14.403 4.6215 12C4.6215 9.597 4.6305 9.312 4.674 8.36325C4.68015 7.79256 4.78494 7.22723 4.98375 6.69225C5.13372 6.30412 5.36318 5.95163 5.65741 5.65741C5.95163 5.36318 6.30412 5.13372 6.69225 4.98375C7.22723 4.78494 7.79256 4.68015 8.36325 4.674C9.312 4.6305 9.597 4.6215 12 4.6215ZM12 3C9.55575 3 9.249 3.0105 8.289 3.054C7.54257 3.06897 6.80409 3.21048 6.105 3.4725C5.50714 3.70388 4.96417 4.05755 4.51086 4.51086C4.05755 4.96417 3.70388 5.50714 3.4725 6.105C3.2104 6.80433 3.06889 7.54307 3.054 8.28975C3.0105 9.24975 3 9.555 3 12C3 14.445 3.0105 14.751 3.054 15.711C3.06897 16.4574 3.21048 17.1959 3.4725 17.895C3.70388 18.4929 4.05755 19.0358 4.51086 19.4891C4.96417 19.9424 5.50714 20.2961 6.105 20.5275C6.80433 20.7896 7.54307 20.9311 8.28975 20.946C9.24975 20.9895 9.55575 21 12 21C14.4443 21 14.751 20.9895 15.711 20.946C16.4577 20.9311 17.1964 20.7896 17.8958 20.5275C18.4936 20.2961 19.0366 19.9424 19.4899 19.4891C19.9432 19.0358 20.2969 18.4929 20.5283 17.895C20.7901 17.1956 20.9314 16.4569 20.946 15.7103C20.9895 14.7503 21 14.445 21 12C21 9.555 20.9895 9.249 20.946 8.289C20.931 7.54257 20.7895 6.80409 20.5275 6.105C20.2961 5.50714 19.9424 4.96417 19.4891 4.51086C19.0358 4.05755 18.4929 3.70388 17.895 3.4725C17.1956 3.21065 16.4569 3.0694 15.7103 3.05475C14.7503 3.00975 14.445 3 12 3Z" fill="#00FF00"/>
+              </svg>
+            </div>
+          </div>
+        </a>
+        <!-- Telegram -->
+        <a href="https://t.me/+bgEDtwLmYC8wZmUx" target="_blank" class="w-inline-block">
+          <div class="menu">
+            <div class="icon w-embed">
+              <svg width="24px" height="24px" viewBox="0 0 24 24" role="img" xmlns="http://www.w3.org/2000/svg">
+                <title>Telegram icon</title>
+                <path d="M23.91 3.79L20.3 20.84c-.25 1.21-.98 1.5-2 .94l-5.5-4.07-2.66 2.57c-.3.3-.55.56-1.1.56-.72 0-.6-.27-.84-.95L6.3 13.7l-5.45-1.7c-1.18-.35-1.19-1.16.26-1.75l21.26-8.2c.97-.43 1.9.24 1.53 1.73z" fill="#00FF00"/>
+              </svg>
+            </div>
+          </div>
+        </a>
+      </div>
+
+      <!-- Second Email Form -->
+      <div class="menu">
+        <div class="menu-content-horizontal form-content">
+          <div class="caption">Get updates</div>
+          <div class="form-block w-form">
+            <form id="email-form-2" name="email-form" data-name="Email Form" method="get" class="updates-form" aria-label="Email Form">
+              <input class="field caption w-input" maxlength="256" name="email-2" data-name="Email 2" placeholder="Email Address" type="email" id="email-2" required>
+              <div class="cta-wrapper">
+                <input type="submit" data-wait="Please wait..." class="cta caption w-button" value="Submit">
+                <div class="cta-grad"></div>
+              </div>
+            </form>
+            <div class="success w-form-done" tabindex="-1" role="region" aria-label="Email Form success">
+              <div class="success-error-content">
+                <div class="caption">Submission Complete!</div>
+              </div>
+            </div>
+            <div class="error w-form-fail" tabindex="-1" role="region" aria-label="Email Form failure">
+              <div class="success-error-content">
+                <div class="caption">ErRor</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Globe Container -->
+  <div id="globe" style="
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 50;
+  "></div>
+
+  <!-- Timestamp Display -->
+  <div id="timestamp" style="
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 60;
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(9px, 1.5vw, 11px);
+    letter-spacing: 2px;
+    color: rgba(0,255,136,0.4);
+    pointer-events: none;
+  "></div>
+
+  <!-- Stats Display -->
+  <div id="globe-stats" style="
+    position: fixed;
+    bottom: 15%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 60;
+    display: flex;
+    gap: clamp(24px, 5vw, 64px);
+    font-family: 'Inter', sans-serif;
+    pointer-events: none;
+  ">
+    <div class="globe-stat">
+      <div id="stat-nodes" style="
+        font-size: clamp(20px, 4vw, 36px);
+        font-weight: 300;
+        color: #00ff88;
+        letter-spacing: 2px;
+        text-shadow: 0 0 20px rgba(0,255,136,0.5);
+      ">—</div>
+      <div style="
+        font-size: clamp(8px, 1.5vw, 10px);
+        letter-spacing: 3px;
+        color: rgba(0,255,136,0.5);
+        margin-top: 4px;
+      ">ACTIVE NODES</div>
+    </div>
+    <div class="globe-stat">
+      <div id="stat-cities" style="
+        font-size: clamp(20px, 4vw, 36px);
+        font-weight: 300;
+        color: #00ff88;
+        letter-spacing: 2px;
+        text-shadow: 0 0 20px rgba(0,255,136,0.5);
+      ">—</div>
+      <div style="
+        font-size: clamp(8px, 1.5vw, 10px);
+        letter-spacing: 3px;
+        color: rgba(0,255,136,0.5);
+        margin-top: 4px;
+      ">CITIES</div>
+    </div>
+    <div class="globe-stat">
+      <div id="stat-countries" style="
+        font-size: clamp(20px, 4vw, 36px);
+        font-weight: 300;
+        color: #00ff88;
+        letter-spacing: 2px;
+        text-shadow: 0 0 20px rgba(0,255,136,0.5);
+      ">—</div>
+      <div style="
+        font-size: clamp(8px, 1.5vw, 10px);
+        letter-spacing: 3px;
+        color: rgba(0,255,136,0.5);
+        margin-top: 4px;
+      ">COUNTRIES</div>
+    </div>
+    <div class="globe-stat">
+      <div id="stat-tps" style="
+        font-size: clamp(20px, 4vw, 36px);
+        font-weight: 300;
+        color: #00ff88;
+        letter-spacing: 2px;
+        text-shadow: 0 0 20px rgba(0,255,136,0.5);
+      ">—</div>
+      <div style="
+        font-size: clamp(8px, 1.5vw, 10px);
+        letter-spacing: 3px;
+        color: rgba(0,255,136,0.5);
+        margin-top: 4px;
+      ">TASKS/SEC</div>
     </div>
   </div>
 
-  <div class="overlay live-indicator">
-    <div class="dot"></div>
-    <span>LIVE</span>
-  </div>
-
+  <!-- Globe Scripts -->
   <script src="https://unpkg.com/globe.gl@2.27.0/dist/globe.gl.min.js"></script>
   <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
   <script>
@@ -231,7 +602,6 @@
       if (!audioCtx || audioCtx.state === 'suspended') return;
       const now = audioCtx.currentTime;
 
-      // Random note from scale
       tickIndex = (tickIndex + Math.floor(Math.random() * 3)) % tickScale.length;
       const freq = tickScale[tickIndex];
 
@@ -245,7 +615,6 @@
       osc.connect(gain);
       gain.connect(audioCtx.destination);
 
-      // Very soft, short tick
       gain.gain.setValueAtTime(0, now);
       gain.gain.linearRampToValueAtTime(0.012, now + 0.01);
       gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
@@ -259,21 +628,20 @@
       if (tickInterval) clearInterval(tickInterval);
       if (!tps || tps < 0.1) return;
 
-      // Cap at 4 ticks per second to avoid overwhelming
       const ticksPerSec = Math.min(4, Math.max(0.5, tps / 10));
       const interval = 1000 / ticksPerSec;
 
       tickInterval = setInterval(() => {
-        if (Math.random() < 0.7) playTick(); // 70% chance each interval for organic feel
+        if (Math.random() < 0.7) playTick();
       }, interval);
     }
 
-    // Ambient pad note (lower, sustained)
+    // Ambient pad note
     function playAmbientNote() {
       if (!audioCtx || audioCtx.state === 'suspended') return;
       const now = audioCtx.currentTime;
 
-      const notes = [130.81, 164.81, 196, 220]; // C3, E3, G3, A3
+      const notes = [130.81, 164.81, 196, 220];
       const freq = notes[Math.floor(Math.random() * notes.length)];
 
       const osc = audioCtx.createOscillator();
@@ -301,7 +669,6 @@
     let ambientInterval = null;
     function startAmbientSounds() {
       if (ambientInterval) return;
-      // Play ambient pad every 3-5 seconds
       function scheduleNext() {
         playAmbientNote();
         const delay = 3000 + Math.random() * 2000;
@@ -311,11 +678,10 @@
     }
 
     function playChime() {
-      // Soft chord on data update
       if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
       const now = audioCtx.currentTime;
 
-      const chord = [261.63, 329.63, 392]; // C4, E4, G4
+      const chord = [261.63, 329.63, 392];
 
       chord.forEach((freq, i) => {
         const osc = audioCtx.createOscillator();
@@ -336,6 +702,44 @@
         osc.stop(now + delay + 1.2);
       });
     }
+
+    // Audio unlock
+    let audioStarted = false;
+    function initAudio() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+
+      // Resume if suspended (browser autoplay policy)
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+
+      if (audioStarted) return;
+      audioStarted = true;
+
+      // Play a short tone to confirm audio is working
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      gain.gain.value = 0.1;
+      osc.frequency.value = 440;
+      osc.start(0);
+      osc.stop(audioCtx.currentTime + 0.1);
+
+      setTimeout(() => {
+        startAmbientSounds();
+        if (currentTPS > 0) updateTickRate(currentTPS);
+      }, 200);
+
+      console.log('Audio initialized:', audioCtx.state);
+    }
+
+    // Multiple ways to trigger audio (browsers are picky)
+    document.addEventListener('click', initAudio);
+    document.addEventListener('touchstart', initAudio);
+    document.addEventListener('keydown', initAudio, { once: true });
 
     // Geo lookup tables
     const geoLookup = {
@@ -370,7 +774,7 @@
       return points;
     }
 
-    // Persistent arc pool with lifecycle management
+    // Persistent arc pool
     let arcPool = [];
     let arcIdCounter = 0;
 
@@ -382,12 +786,10 @@
       if (a && b && a !== b) {
         return {
           id: arcIdCounter++,
-          startLat: a.lat,
-          startLng: a.lng,
-          endLat: b.lat,
-          endLng: b.lng,
+          startLat: a.lat, startLng: a.lng,
+          endLat: b.lat, endLng: b.lng,
           birth: Date.now(),
-          lifespan: 8000 + Math.random() * 12000 // 8-20 seconds
+          lifespan: 8000 + Math.random() * 12000
         };
       }
       return null;
@@ -395,34 +797,29 @@
 
     function updateArcs(points) {
       const now = Date.now();
-
-      // Remove expired arcs
       arcPool = arcPool.filter(arc => (now - arc.birth) < arc.lifespan);
-
-      // Add new arcs to maintain ~20 active
-      while (arcPool.length < 20 && points.length > 0) {
+      while (arcPool.length < 15 && points.length > 0) {
         const newArc = createArc(points);
         if (newArc) arcPool.push(newArc);
       }
-
       return arcPool;
     }
 
     // Initialize globe
     const globe = Globe()
-      .backgroundColor('#000000')
+      .backgroundColor('rgba(0,0,0,0)')
       .showGlobe(true)
       .showAtmosphere(true)
       .atmosphereColor('#00ff88')
       .atmosphereAltitude(0.15)
-      .globeMaterial(new THREE.MeshBasicMaterial({ color: '#020804', transparent: true, opacity: 0.95 }))
+      .globeMaterial(new THREE.MeshBasicMaterial({ color: '#020804', transparent: true, opacity: 0.85 }))
       .pointColor(() => '#00ff88')
       .pointAltitude(d => d.size * 0.012)
       .pointRadius(d => d.size)
       .pointResolution(24)
-      .pointLabel(d => `<div style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #00ff88; background: rgba(0,0,0,0.85); padding: 10px 14px; border: 1px solid rgba(0,255,136,0.15); border-radius: 3px; backdrop-filter: blur(4px);">
-        <div style="font-weight: 400; letter-spacing: 1px;">${d.city}</div>
-        <div style="opacity: 0.5; font-size: 9px; margin-top: 4px; letter-spacing: 2px;">${d.workers} NODES</div>
+      .pointLabel(d => `<div style="font-family: 'Inter', sans-serif; font-size: 11px; color: #00ff88; background: rgba(0,0,0,0.85); padding: 10px 14px; border: 1px solid rgba(0,255,136,0.15); border-radius: 3px; backdrop-filter: blur(4px);">
+        <div style="font-weight: 500; letter-spacing: 1px;">${d.city}</div>
+        <div style="opacity: 0.5; font-size: 10px; margin-top: 4px; letter-spacing: 2px;">${d.workers} NODES</div>
       </div>`)
       .arcColor(d => {
         const age = (Date.now() - d.birth) / d.lifespan;
@@ -455,10 +852,34 @@
     // Camera
     globe.pointOfView({ lat: 20, lng: 105, altitude: 2.2 });
     globe.controls().autoRotate = true;
-    globe.controls().autoRotateSpeed = 0.2;
-    globe.controls().enableZoom = true;
-    globe.controls().minDistance = 150;
-    globe.controls().maxDistance = 500;
+    globe.controls().autoRotateSpeed = 0.3;
+    globe.controls().enableZoom = false;
+    globe.controls().enableRotate = true;
+    globe.controls().enablePan = false;
+
+    // Fetch data from API
+    async function fetchData() {
+      try {
+        const res = await fetch('/api/data');
+        const data = await res.json();
+        const points = processData(data.cities);
+        globe.pointsData(points);
+        globe.ringsData(points.filter(p => p.workers >= 5));
+
+        // Update stats display
+        document.getElementById('stat-nodes').textContent = data.total_active?.toLocaleString() || '—';
+        document.getElementById('stat-cities').textContent = data.total_cities?.toLocaleString() || '—';
+        document.getElementById('stat-countries').textContent = data.total_countries?.toLocaleString() || '—';
+        document.getElementById('stat-tps').textContent = data.tasks_per_second?.toFixed(1) || '—';
+
+        // Update audio tick rate based on tasks per second
+        if (data.tasks_per_second !== undefined) {
+          updateTickRate(data.tasks_per_second);
+        }
+      } catch (e) {
+        console.log('Waiting for data...', e.message);
+      }
+    }
 
     // Update timestamp
     function updateTimestamp() {
@@ -469,109 +890,72 @@
     updateTimestamp();
     setInterval(updateTimestamp, 1000);
 
-    // Update stats with animation
-    let lastTotal = 0;
-    function updateStats(total, cities, countries, tps) {
-      const flash = document.getElementById('flash');
-
-      if (total !== lastTotal && lastTotal !== 0) {
-        playChime();
-        flash.classList.add('active');
-        setTimeout(() => flash.classList.remove('active'), 400);
-
-        ['nodes', 'cities', 'countries', 'tps'].forEach(id => {
-          document.getElementById(id).classList.add('updated');
-          setTimeout(() => document.getElementById(id).classList.remove('updated'), 600);
-        });
-      }
-      lastTotal = total;
-
-      document.getElementById('nodes').textContent = total.toLocaleString();
-      document.getElementById('cities').textContent = cities.toLocaleString();
-      document.getElementById('countries').textContent = countries.toLocaleString();
-      document.getElementById('tps').textContent = tps !== undefined ? tps.toFixed(1) : '—';
-    }
-
-    // Fetch and update data
-    async function fetchData() {
-      try {
-        const res = await fetch('/api/data');
-        const data = await res.json();
-
-        const points = processData(data.cities);
-
-        globe.pointsData(points);
-        globe.ringsData(points.filter(p => p.workers >= 5));
-
-        updateStats(data.total_active, data.total_cities, data.total_countries, data.tasks_per_second);
-
-        // Update tick rate based on tasks per second
-        if (data.tasks_per_second !== undefined) {
-          updateTickRate(data.tasks_per_second);
-        }
-      } catch (e) {
-        console.log('Waiting for data...', e.message);
-      }
-    }
-
     // Initial fetch + periodic updates
     fetchData();
     setInterval(fetchData, 15000);
 
-    // Smooth arc lifecycle - update every 500ms for smooth fade in/out
-    setInterval(() => {
-      const points = globe.pointsData();
-      if (points.length) {
-        const arcs = updateArcs(points);
-        globe.arcsData(arcs);
+    // Handle window resize
+    window.addEventListener('resize', () => {
+      globe.width(window.innerWidth);
+      globe.height(window.innerHeight);
+    });
+
+    // Handle visibility change to prevent stutter on refocus
+    let arcIntervalId = null;
+    function startArcUpdates() {
+      if (arcIntervalId) return;
+      arcIntervalId = setInterval(() => {
+        const points = globe.pointsData();
+        if (points.length) {
+          globe.arcsData(updateArcs(points));
+        }
+      }, 500);
+    }
+    function stopArcUpdates() {
+      if (arcIntervalId) {
+        clearInterval(arcIntervalId);
+        arcIntervalId = null;
       }
-    }, 500);
-
-    // Audio init - iOS requires synchronous creation in touch handler
-    let audioStarted = false;
-    let audioUnlocked = false;
-
-    function unlockAudio(e) {
-      if (audioUnlocked) return;
-      audioUnlocked = true;
-
-      // Create AudioContext synchronously in gesture
-      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-
-      // iOS requires playing something immediately in the gesture
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-      gain.gain.value = 0.15;
-      osc.frequency.value = 440;
-      osc.start(0);
-      osc.stop(audioCtx.currentTime + 0.15);
-
-      // Visual feedback
-      document.body.style.background = '#001100';
-      setTimeout(() => document.body.style.background = '#000', 100);
-
-      // Start ambient after unlock
-      setTimeout(() => {
-        audioStarted = true;
-        startAmbientSounds();
-        if (currentTPS > 0) updateTickRate(currentTPS);
-      }, 200);
-
-      console.log('Audio unlocked:', audioCtx.state);
     }
 
-    // Attach directly to document for iOS
-    document.addEventListener('touchstart', unlockAudio, { once: true });
-    document.addEventListener('click', unlockAudio, { once: true });
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        stopArcUpdates();
+        if (tickInterval) {
+          clearInterval(tickInterval);
+          tickInterval = null;
+        }
+      } else {
+        // Small delay before resuming to let browser stabilize
+        setTimeout(() => {
+          startArcUpdates();
+          if (currentTPS > 0) updateTickRate(currentTPS);
+        }, 100);
+      }
+    });
 
-    // Desktop auto-start
-    if (!('ontouchstart' in window)) {
-      setTimeout(() => {
-        unlockAudio();
-      }, 1000);
-    }
+    // Start arc updates initially
+    startArcUpdates();
   </script>
+
+  <!-- Footer -->
+  <footer style="
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 60;
+    display: flex;
+    gap: 24px;
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+  ">
+    <a href="/privacy-policy" style="color: rgba(255,255,255,0.5); text-decoration: none; transition: color 0.2s;">Privacy Policy</a>
+    <a href="/terms-of-services" style="color: rgba(255,255,255,0.5); text-decoration: none; transition: color 0.2s;">Terms of Service</a>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="assets/js/jquery.min.js" type="text/javascript"></script>
+  <script src="assets/js/webflow.js" type="text/javascript"></script>
 </body>
 </html>
