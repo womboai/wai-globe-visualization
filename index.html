@@ -355,9 +355,23 @@
           font-size: 9px !important;
           letter-spacing: 1px !important;
         }
+        /* Shrink globe on mobile */
+        #globe {
+          transform: scale(0.8);
+          transform-origin: center 30%;
+        }
+        /* 2x2 grid for stats on mobile */
         #globe-stats {
-          bottom: 25% !important;
-          gap: 16px !important;
+          bottom: 32% !important;
+          display: grid !important;
+          grid-template-columns: 1fr 1fr !important;
+          gap: 16px 32px !important;
+          text-align: center !important;
+        }
+        .globe-stat {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
         }
       }
 
@@ -365,6 +379,13 @@
       @media screen and (max-width: 380px) {
         .heading-new.main {
           font-size: 18px !important;
+        }
+        #globe {
+          transform: scale(0.7);
+          transform-origin: center 25%;
+        }
+        #globe-stats {
+          bottom: 35% !important;
         }
       }
     </style>
